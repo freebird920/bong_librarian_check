@@ -35,7 +35,7 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
 
       final Librarian librarian = Librarian(
         name: _nameController.text,
-        studentId: int.parse(_studentIdController.value.text),
+        studentId: int.tryParse(_studentIdController.value.text) ?? 0,
         enteranceYear: 2024,
         day: 123,
       );
@@ -77,6 +77,7 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
                   },
                 ),
                 TextFormField(
+                  controller: _studentIdController,
                   decoration: const InputDecoration(labelText: "Student Id"),
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
