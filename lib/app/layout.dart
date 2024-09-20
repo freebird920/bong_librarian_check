@@ -13,13 +13,13 @@ final List<RouteBase> _routes = <RouteBase>[
   GoRoute(
     path: "/settings",
     builder: (context, state) => const SettingsPage(),
-    routes: [
+    routes: <RouteBase>[
       GoRoute(
         path: "set_librarians",
         builder: (context, state) => const SetLibrarinasPage(),
-      )
+      ),
     ],
-  )
+  ),
 ];
 
 // Create Router

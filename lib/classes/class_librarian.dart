@@ -2,29 +2,29 @@ import 'dart:convert';
 
 class Librarian {
   final String name;
-  final int day;
   final int studentId;
+  final int enteranceYear;
+  int? day;
   String? description;
 
   Librarian({
     required this.name,
-    required this.day,
     required this.studentId,
+    required this.enteranceYear,
+    this.day,
     this.description,
   });
 
-  // 객체를 Map으로 변환하는 toJson 메서드
-  Map<String, dynamic> _toJson() {
+  Map<String, dynamic> get toJson {
     return {
       'name': name,
-      'day': day,
       'studentId': studentId,
-      'description': description,
+      'enteranceYear': enteranceYear,
+      'day': day,
     };
   }
 
-  // Map을 JSON 문자열로 변환하는 toJsonString 메서드
-  String toJsonString() {
-    return jsonEncode(_toJson());
+  String get toJsonString {
+    return jsonEncode(toJson);
   }
 }

@@ -4,7 +4,6 @@ class JsonService {}
 
 class Librarian {
   final String name;
-
   final int studentId;
   final int enteranceYear;
   int? day;

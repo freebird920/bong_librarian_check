@@ -1,6 +1,6 @@
+import 'package:bong_librarian_check/classes/class_librarian.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 
 void openAddLibrarian(BuildContext context) {
   showModalBottomSheet(
@@ -33,6 +33,13 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
       print('Form submitted');
       print('Name: ${_nameController.text}');
 
+      final Librarian librarian = Librarian(
+        name: _nameController.text,
+        studentId: int.parse(_studentIdController.value.text),
+        enteranceYear: 2024,
+        day: 123,
+      );
+      print(librarian.toJsonString);
       // 폼을 초기화할 수도 있습니다.
       _formKey.currentState?.reset();
     }
@@ -70,6 +77,7 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
                   },
                 ),
                 TextFormField(
+                  decoration: const InputDecoration(labelText: "Student Id"),
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
