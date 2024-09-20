@@ -89,6 +89,26 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
                     return null;
                   },
                 ),
+                TextFormField(
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a number';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid decimal number';
+                    }
+                    if (double.parse(value) <= 10100) {
+                      return 'Please enter a number greater than 10100';
+                    }
+                    if (double.parse(value) > 39999) {
+                      return 'Please enter a number under 39999';
+                    }
+                    return null;
+                  },
+                ),
                 const TextField(
                   decoration: InputDecoration(labelText: "Day"),
                 ),
