@@ -1,4 +1,5 @@
 import 'package:bong_librarian_check/classes/class_librarian.dart';
+import 'package:bong_librarian_check/services/file_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -27,7 +28,7 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
   final _dayController = TextEditingController();
   final _studentIdController = TextEditingController();
   // 폼 제출 처리
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
       // 유효성 검사가 통과되었을 때 폼 제출 로직 실행
       print('Form submitted');
@@ -41,6 +42,8 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
       );
       print(librarian.toJsonString);
       // 폼을 초기화할 수도 있습니다.
+      final fileService = FileService();
+      fileService.writeLibrarians([librarian]);
       _formKey.currentState?.reset();
     }
   }
