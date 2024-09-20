@@ -13,11 +13,15 @@ class _CompNavbarState extends State<CompNavbar> {
   @override
   void initState() {
     super.initState();
-    final myUri = GoRouter.of(context).routeInformationProvider.value.uri;
+    final uri = GoRouter.of(context).routeInformationProvider.value.uri;
+    final myUriSplit = uri.toString().split("/");
+    final myUri = Uri.parse("/${myUriSplit[1]}");
     switch (myUri.toString()) {
       case "/":
         _selectedIndex = 0;
         break;
+      case "/settings":
+        _selectedIndex = 2;
       default:
         _selectedIndex = 0;
         break;
@@ -37,17 +41,19 @@ class _CompNavbarState extends State<CompNavbar> {
     return BottomNavigationBar(
       currentIndex: _selectedIndex,
       onTap: (final int value) {
+        final goRouter = GoRouter.of(context);
         switch (value) {
           case 0:
-            print(value.toString());
-            GoRouter.of(context).go("/");
+            goRouter.go("/");
             break;
+          case 2:
+            goRouter.go("/settings");
         }
       },
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
       ],
     );
   }

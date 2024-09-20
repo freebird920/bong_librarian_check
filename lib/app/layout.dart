@@ -1,4 +1,6 @@
 import 'package:bong_librarian_check/app/page.dart';
+import 'package:bong_librarian_check/app/settings/page.dart';
+import 'package:bong_librarian_check/app/settings/set_librarians/page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,6 +9,16 @@ final List<RouteBase> _routes = <RouteBase>[
     path: "/",
     builder: (context, state) => const HomePage(),
   ),
+  GoRoute(
+    path: "/settings",
+    builder: (context, state) => const SettingsPage(),
+    routes: [
+      GoRoute(
+        path: "set_librarians",
+        builder: (context, state) => const SetLibrarinasPage(),
+      )
+    ],
+  )
 ];
 
 final GoRouter _router = GoRouter(routes: _routes);

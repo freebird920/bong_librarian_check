@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:bong_librarian_check/helper/class_result.dart';
+import 'package:bong_librarian_check/classes/class_result.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FileService {
