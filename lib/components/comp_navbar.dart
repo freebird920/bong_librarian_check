@@ -36,8 +36,6 @@ class _CompNavbarState extends State<CompNavbar> {
 
   @override
   Widget build(BuildContext context) {
-    final myUri = GoRouter.of(context).routeInformationProvider.value.uri;
-    print(myUri.toString());
     return BottomNavigationBar(
       currentIndex: _selectedIndex,
       onTap: (final int value) {
