@@ -1,3 +1,5 @@
+import 'package:bong_librarian_check/app/settings/set_librarians/modal_edit_librarian.dart';
+import 'package:bong_librarian_check/classes/class_librarian.dart';
 import 'package:bong_librarian_check/components/modal_add_librarian.dart';
 import 'package:bong_librarian_check/components/comp_navbar.dart';
 import 'package:bong_librarian_check/providers/provider_librarian.dart';
@@ -53,30 +55,10 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
             : ListView.builder(
                 itemCount: librarianProvider.data.length,
                 itemBuilder: (context, index) {
-                  final librarian = librarianProvider.data[index];
-                  return ListTile(
-                      key: ValueKey(librarian.uuid),
-                      leading: Text((index + 1).toString()),
-                      title: Text(librarian.name),
-                      subtitle: Text(librarian.studentId.toString()),
-                      trailing: PopupMenuButton<String>(
-                        itemBuilder: (context) {
-                          return <PopupMenuEntry<String>>[
-                            const PopupMenuItem(
-                              value: "edit",
-                              child: Text("Edit"),
-                            ),
-                            PopupMenuItem(
-                              value: "delete",
-                              child: const Text("Delete"),
-                              onTap: () {
-                                librarianProvider
-                                    .removeLibrarian(librarian.uuid);
-                              },
-                            ),
-                          ];
-                        },
-                      ));
+                  return LibrarianListTile(
+                    index: index,
+                    // librarian: librarianProvider.data[index],
+                  );
                 },
               ),
       ),
@@ -84,11 +66,61 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
   }
 }
 
+/// # LibrarianListTile
+/// - Librarian 객체를 받아서 ListTile로 표현
+/// - index: 순서
+/// - librarian: Librarian 객체
+/// - ListTile: 순서, 이름, 학번, PopupMenuButton으로 구성
 class LibrarianListTile extends StatelessWidget {
-  const LibrarianListTile({super.key});
+  final int index;
+  const LibrarianListTile({
+    super.key,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const ListTile();
+    final librarianProvider = Provider.of<ProviderLibrarian>(context);
+    final librarian = librarianProvider.data[index];
+    return ListTile(
+      key: ValueKey(librarian.uuid),
+      leading: Text((index + 1).toString()),
+      title: Text(librarian.name),
+      subtitle: Text(librarian.studentId.toString()),
+      trailing: LibrarianPopupMenu(librarian: librarian),
+    );
+  }
+}
+
+class LibrarianPopupMenu extends StatelessWidget {
+  final Librarian librarian;
+  const LibrarianPopupMenu({
+    super.key,
+    required this.librarian,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final librarianProvider = Provider.of<ProviderLibrarian>(context);
+
+    return PopupMenuButton<String>(
+      itemBuilder: (context) {
+        return <PopupMenuEntry<String>>[
+          PopupMenuItem(
+            value: "edit",
+            child: const Text("Edit"),
+            onTap: () =>
+                openEditLibrarian(context: context, librarian: librarian),
+          ),
+          PopupMenuItem(
+            value: "delete",
+            child: const Text("Delete"),
+            onTap: () {
+              librarianProvider.removeLibrarian(librarian.uuid);
+            },
+          ),
+        ];
+      },
+    );
   }
 }

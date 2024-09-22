@@ -1,4 +1,5 @@
 import 'package:bong_librarian_check/classes/class_librarian.dart';
+import 'package:bong_librarian_check/classes/class_result.dart';
 import 'package:bong_librarian_check/services/file_service.dart';
 import 'package:flutter/material.dart';
 
@@ -33,10 +34,27 @@ class ProviderLibrarian with ChangeNotifier {
     }
   }
 
+  Result<Librarian> getLibrarian(String uuid) {
+    final results = _librarians.where((librarian) => librarian.uuid == uuid);
+    if (results.isNotEmpty) {
+      return Result(data: results.first);
+    }
+    return Result(error: Exception("Librarian not found"));
+  }
+
   // Librarian 추가
-  Future<void> addLibrarian(Librarian librarian) async {
-    _librarians.add(librarian);
-    await _saveLibrarians(); // 저장 후 갱신
+  /// # addLibrarian(Librarian librarian)
+  /// - Librarian 객체를 받아서 해당 객체를 List에 추가
+  /// ## Return Result<String>
+  /// - 추가된 Librarian의 uuid를 반환
+  Future<Result<String>> addLibrarian(Librarian librarian) async {
+    try {
+      _librarians.add(librarian);
+      await _saveLibrarians(); // 저장 후 갱신
+      return Result(data: librarian.uuid);
+    } catch (e) {
+      return Result(error: e is Exception ? e : Exception(e.toString()));
+    }
   }
 
   // Librarian 삭제
@@ -45,14 +63,34 @@ class ProviderLibrarian with ChangeNotifier {
     await _saveLibrarians(); // 저장 후 갱신
   }
 
+  // Librarian 수정
+  /// 수정할 Librarian 객체를 받아서 해당 객체의 uuid를 찾아서 수정
+  /// Return
+  Future<Result<String>> updateLibrarian(Librarian librarian) async {
+    try {
+      final index = _librarians.indexWhere((lib) => lib.uuid == librarian.uuid);
+      if (index == -1) {
+        throw Exception("Librarian not found");
+      }
+      _librarians[index] = librarian;
+
+      await _saveLibrarians();
+
+      return Result(data: librarian.uuid); // 저장 후 갱신
+    } catch (e) {
+      return Result(error: e is Exception ? e : Exception(e.toString()));
+    }
+  }
+
   // Librarian 목록을 파일에 저장
-  Future<void> _saveLibrarians() async {
+  Future<Result<bool>> _saveLibrarians() async {
     try {
       await _fileService.writeLibrarians(_librarians);
-      loadLibrarians(); // 저장 후 다시 로드
+      loadLibrarians();
+      return Result(data: true); // 저장 후 다시 로드
     } catch (e) {
-      _errorMessage = e.toString();
       notifyListeners();
+      return Result(error: e is Exception ? e : Exception(e.toString()));
     }
   }
 }
