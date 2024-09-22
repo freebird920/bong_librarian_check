@@ -16,19 +16,17 @@ class ProviderLibrarian with ChangeNotifier {
   // 초기화 및 Librarian 데이터 로드
   Future<void> loadLibrarians() async {
     _isLoading = true;
-    _errorMessage = null;
     notifyListeners(); // UI 갱신
 
     try {
       final result = await _fileService.readLibrarians();
       if (result.isSuccess && result.data != null) {
         _librarians = result.data!;
-        print(_librarians);
-      } else {
-        _errorMessage = result.error?.toString();
+      } else if (result.isError) {
+        throw result.error.toString();
       }
     } catch (e) {
-      _errorMessage = e.toString();
+      throw Exception(e);
     } finally {
       _isLoading = false;
       notifyListeners(); // 로딩 종료 후 UI 갱신
@@ -51,6 +49,7 @@ class ProviderLibrarian with ChangeNotifier {
   Future<void> _saveLibrarians() async {
     try {
       await _fileService.writeLibrarians(_librarians);
+      loadLibrarians(); // 저장 후 다시 로드
     } catch (e) {
       _errorMessage = e.toString();
       notifyListeners();

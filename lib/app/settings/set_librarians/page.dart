@@ -14,7 +14,6 @@ class SetLibrarinasPage extends StatefulWidget {
 class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ProviderLibrarian>(context, listen: false).loadLibrarians();
@@ -23,7 +22,6 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -57,8 +55,15 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
                 itemBuilder: (context, index) {
                   final librarian = librarianProvider.data[index];
                   return ListTile(
+                    leading: Text((index + 1).toString()),
                     title: Text(librarian.name),
                     subtitle: Text(librarian.studentId.toString()),
+                    trailing: IconButton(
+                      onPressed: () {
+                        librarianProvider.removeLibrarian(librarian.uuid);
+                      },
+                      icon: const Icon(Icons.delete),
+                    ),
                   );
                 },
               ),

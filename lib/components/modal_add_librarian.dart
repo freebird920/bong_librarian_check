@@ -1,6 +1,6 @@
 import 'package:bong_librarian_check/classes/class_librarian.dart';
+import 'package:bong_librarian_check/helper/student_id_validator.dart';
 import 'package:bong_librarian_check/providers/provider_librarian.dart';
-import 'package:bong_librarian_check/services/file_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -34,6 +34,8 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
   void _submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
       // 유효성 검사가 통과되었을 때 폼 제출 로직 실행
+      final librarinaProvider =
+          Provider.of<ProviderLibrarian>(context, listen: false);
 
       final Librarian librarian = Librarian(
         name: _nameController.text,
@@ -41,12 +43,10 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
         enteranceYear: 2034,
         dayOfWeek: 2,
       );
-      print(librarian.toJsonString);
-      final fileService = FileService();
-      fileService.writeLibrarians([librarian]);
+      librarinaProvider.addLibrarian(librarian);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("data"),
+          content: Text("add"),
         ),
       );
       // FORM 초기화
@@ -56,7 +56,6 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _formKey.currentState?.dispose();
     _nameController.dispose();
     _studentIdController.dispose();
@@ -71,6 +70,7 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
       heightFactor: 0.9,
       child: SingleChildScrollView(
         child: Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formKey,
           child: Column(
             children: <Widget>[
@@ -91,21 +91,7 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a number';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter a valid decimal number';
-                  }
-                  if (double.parse(value) <= 10100) {
-                    return 'Please enter a number greater than 10100';
-                  }
-                  if (double.parse(value) > 39999) {
-                    return 'Please enter a number under 39999';
-                  }
-                  return null;
-                },
+                validator: studentIdValidator,
               ),
               ElevatedButton(
                 onPressed: () {
