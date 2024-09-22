@@ -83,3 +83,12 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
     );
   }
 }
+
+class LibrarianListTile extends StatelessWidget {
+  const LibrarianListTile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const ListTile();
+  }
+}
