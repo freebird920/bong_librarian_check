@@ -55,16 +55,28 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
                 itemBuilder: (context, index) {
                   final librarian = librarianProvider.data[index];
                   return ListTile(
-                    leading: Text((index + 1).toString()),
-                    title: Text(librarian.name),
-                    subtitle: Text(librarian.studentId.toString()),
-                    trailing: IconButton(
-                      onPressed: () {
-                        librarianProvider.removeLibrarian(librarian.uuid);
-                      },
-                      icon: const Icon(Icons.delete),
-                    ),
-                  );
+                      key: ValueKey(librarian.uuid),
+                      leading: Text((index + 1).toString()),
+                      title: Text(librarian.name),
+                      subtitle: Text(librarian.studentId.toString()),
+                      trailing: PopupMenuButton<String>(
+                        itemBuilder: (context) {
+                          return <PopupMenuEntry<String>>[
+                            const PopupMenuItem(
+                              value: "edit",
+                              child: Text("Edit"),
+                            ),
+                            PopupMenuItem(
+                              value: "delete",
+                              child: const Text("Delete"),
+                              onTap: () {
+                                librarianProvider
+                                    .removeLibrarian(librarian.uuid);
+                              },
+                            ),
+                          ];
+                        },
+                      ));
                 },
               ),
       ),
