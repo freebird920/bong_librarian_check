@@ -14,12 +14,14 @@ void openEditLibrarian({
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
-    builder: (context) => const ModalAddLibrarian(),
+    builder: (context) => ModalAddLibrarian(librarian: librarian),
   );
 }
 
 class ModalAddLibrarian extends StatefulWidget {
+  final Librarian librarian;
   const ModalAddLibrarian({
+    required this.librarian,
     super.key,
   });
 
@@ -34,6 +36,26 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
   // input values
   final _nameController = TextEditingController();
   final _studentIdController = TextEditingController();
+  void _editLibrarian(String uuid) {
+    final librarinaProvider =
+        Provider.of<ProviderLibrarian>(context, listen: false);
+
+    final Librarian librarian = Librarian(
+      uuid: uuid,
+      name: _nameController.text,
+      studentId: int.tryParse(_studentIdController.value.text) ?? 0,
+      enteranceYear: 2034,
+      dayOfWeek: 2,
+    );
+    librarinaProvider.updateLibrarian(librarian);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("edit"),
+      ),
+    );
+    // FORM 초기화
+    _formKey.currentState?.reset();
+  }
 
   // 폼 제출 처리
   void _submitForm() async {
@@ -60,11 +82,17 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _nameController.text = widget.librarian.name;
+    _studentIdController.text = widget.librarian.studentId.toString();
+  }
+
+  @override
   void dispose() {
     _formKey.currentState?.dispose();
     _nameController.dispose();
     _studentIdController.dispose();
-
     super.dispose();
   }
 
@@ -79,6 +107,8 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
           key: _formKey,
           child: Column(
             children: <Widget>[
+              const Text("Librarin Edit"),
+              Text(widget.librarian.uuid),
               TextFormField(
                 autofocus: true,
                 controller: _nameController,
@@ -100,7 +130,8 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  _submitForm();
+                  // _submitForm();
+                  _editLibrarian(widget.librarian.uuid);
                   librarianProvider.loadLibrarians();
                   GoRouter.of(context).pop();
                 },

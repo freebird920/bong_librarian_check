@@ -1,5 +1,4 @@
-import 'package:bong_librarian_check/app/settings/set_librarians/modal_edit_librarian.dart';
-import 'package:bong_librarian_check/classes/class_librarian.dart';
+import 'package:bong_librarian_check/app/settings/set_librarians/components/popup_menu_librarian.dart';
 import 'package:bong_librarian_check/components/modal_add_librarian.dart';
 import 'package:bong_librarian_check/components/comp_navbar.dart';
 import 'package:bong_librarian_check/providers/provider_librarian.dart';
@@ -36,16 +35,15 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
         title: const Text("Set Librarians"),
         actions: [
           IconButton(
+            icon: const Icon(Icons.refresh),
             onPressed: () {
-              for (var librarian in librarianProvider.data) {
-                print(librarian.toJsonString);
-              }
+              librarianProvider.loadLibrarians();
             },
-            icon: const Icon(Icons.ac_unit_rounded),
           ),
           IconButton(
-              onPressed: () => openAddLibrarian(context),
-              icon: const Icon(Icons.add))
+            onPressed: () => openAddLibrarian(context),
+            icon: const Icon(Icons.add),
+          ),
         ],
       ),
       bottomNavigationBar: const CompNavbar(),
@@ -88,39 +86,6 @@ class LibrarianListTile extends StatelessWidget {
       title: Text(librarian.name),
       subtitle: Text(librarian.studentId.toString()),
       trailing: LibrarianPopupMenu(librarian: librarian),
-    );
-  }
-}
-
-class LibrarianPopupMenu extends StatelessWidget {
-  final Librarian librarian;
-  const LibrarianPopupMenu({
-    super.key,
-    required this.librarian,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final librarianProvider = Provider.of<ProviderLibrarian>(context);
-
-    return PopupMenuButton<String>(
-      itemBuilder: (context) {
-        return <PopupMenuEntry<String>>[
-          PopupMenuItem(
-            value: "edit",
-            child: const Text("Edit"),
-            onTap: () =>
-                openEditLibrarian(context: context, librarian: librarian),
-          ),
-          PopupMenuItem(
-            value: "delete",
-            child: const Text("Delete"),
-            onTap: () {
-              librarianProvider.removeLibrarian(librarian.uuid);
-            },
-          ),
-        ];
-      },
     );
   }
 }
