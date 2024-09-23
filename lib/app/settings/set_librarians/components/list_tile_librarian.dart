@@ -28,12 +28,25 @@ class LibrarianListTile extends StatelessWidget {
       key: ValueKey(librarian.uuid),
       leading: Text((index + 1).toString()),
       title: Text(
-          "[${librarian.enteranceYear}] ${librarian.studentId.toString()} /  ${librarian.name}"),
+        "[${librarian.enteranceYear}] ${librarian.studentId.toString()} /  ${librarian.name}",
+        style: const TextStyle(
+          fontFamily: "IBMPlexMono",
+          textBaseline: TextBaseline.ideographic,
+        ),
+      ),
       subtitle: OutlinedButton(
         onPressed: () {
           openSetDayOfWeekDialog(context: context, librarian: librarian);
         },
-        child: const Text("${"설정하세요"} "),
+        child: const Text(
+          "${"설정하세요"} ",
+          style: TextStyle(
+            fontFamily: "NotoSansKR",
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+            // decoration: TextDecoration.lineThrough,
+          ),
+        ),
       ),
       trailing: LibrarianPopupMenu(librarian: librarian),
     );
