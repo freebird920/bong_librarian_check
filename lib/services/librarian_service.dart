@@ -65,4 +65,31 @@ class LibrarianService {
       );
     }
   }
+
+  Future<Result<List<String>>> getYearDirectories() async {
+    try {
+      final myLocalPath = await _fileService.localPath;
+      if (myLocalPath.error != null) {
+        throw myLocalPath.error!;
+      }
+
+      final directoryPath = '${myLocalPath.data}${_localSaperator}librarians';
+      final directory = Directory(directoryPath);
+
+      // 폴더가 있는지 확인
+      if (!directory.existsSync()) {
+        return Result(data: []);
+      }
+
+      final yearDirectories = await directory
+          .list()
+          .where((entity) => entity is Directory)
+          .map((entity) => entity.path.split(Platform.pathSeparator).last)
+          .toList();
+
+      return Result(data: yearDirectories);
+    } catch (e) {
+      return Result(error: e is Exception ? e : Exception(e.toString()));
+    }
+  }
 }

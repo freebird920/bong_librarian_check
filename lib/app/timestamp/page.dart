@@ -1,4 +1,3 @@
-import 'package:bong_librarian_check/classes/class_librarian.dart';
 import 'package:bong_librarian_check/components/comp_navbar.dart';
 import 'package:bong_librarian_check/providers/provider_librarian.dart';
 import 'package:bong_librarian_check/providers/provider_timestamp.dart';
@@ -31,6 +30,7 @@ class _TimestampPageState extends State<TimestampPage> {
       ),
       body: Center(
         child: ListView.builder(
+          reverse: true,
           itemCount: timestampProvider.data.length,
           itemBuilder: (context, index) {
             final timestamp = timestampProvider.data[index];

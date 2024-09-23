@@ -1,9 +1,9 @@
 import 'package:bong_librarian_check/classes/class_library_timestamp.dart';
-import 'package:bong_librarian_check/services/file_service.dart';
+import 'package:bong_librarian_check/services/timestamp_service.dart';
 import 'package:flutter/material.dart';
 
 class ProviderTimestamp with ChangeNotifier {
-  final FileService _fileService = FileService();
+  final TimestampService _timestampService = TimestampService();
   List<LibraryTimestamp> _timestamps = [];
   String? _errorMessage;
   bool _isLoading = false;
@@ -17,7 +17,7 @@ class ProviderTimestamp with ChangeNotifier {
     notifyListeners(); // 로딩 상태 시작 알림
 
     try {
-      final result = await _fileService.loadAllTimestamps();
+      final result = await _timestampService.loadAllTimestamps();
       _timestamps = result;
     } catch (e) {
       _errorMessage = e.toString();
@@ -28,7 +28,7 @@ class ProviderTimestamp with ChangeNotifier {
   }
 
   Future<void> saveTimestamp(LibraryTimestamp myTimestamp) async {
-    await _fileService.saveTimestamp(myTimestamp);
+    await _timestampService.saveTimestamp(myTimestamp);
     loadTimestamps();
   }
 }
