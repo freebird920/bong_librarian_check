@@ -4,6 +4,7 @@ import 'package:bong_librarian_check/components/comp_navbar.dart';
 import 'package:bong_librarian_check/services/file_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -36,6 +37,14 @@ class SettingsPage extends StatelessWidget {
                   await Process.run('explorer', [path.data!]);
                 },
               ),
+            ListTile(
+              leading: const Icon(Icons.festival),
+              title: const Text("DeveloperHomePage"),
+              onTap: () async {
+                const url = "https://blog.naver.com/freebird_han";
+                await launchUrl(Uri.parse(url));
+              },
+            ),
           ],
         ),
       ),
