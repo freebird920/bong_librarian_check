@@ -21,7 +21,7 @@ class AlertDialogSetDayOfWeek extends StatelessWidget {
   const AlertDialogSetDayOfWeek({super.key, required this.librarian});
   @override
   Widget build(BuildContext context) {
-    final List<int> dayOfWeek = [0, 1, 2, 3, 4];
+    final List<int> dayOfWeek = [1, 2, 3, 4, 5];
     return AlertDialog(
       title: const Text("요일설정"),
       content: Text("${librarian.name}의 요일을 설정하십시오."),

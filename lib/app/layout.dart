@@ -1,6 +1,7 @@
 import 'package:bong_librarian_check/app/page.dart';
 import 'package:bong_librarian_check/app/settings/page.dart';
 import 'package:bong_librarian_check/app/settings/set_librarians/page.dart';
+import 'package:bong_librarian_check/app/timestamp/page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -20,6 +21,10 @@ final List<RouteBase> _routes = <RouteBase>[
       ),
     ],
   ),
+  GoRoute(
+    path: "/timestamp",
+    builder: (context, state) => const TimestampPage(),
+  )
 ];
 
 // Create Router

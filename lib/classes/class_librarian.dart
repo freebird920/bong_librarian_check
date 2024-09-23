@@ -11,8 +11,8 @@ class Librarian {
 
   // dayOfWeek의 유효성 검사
   set dayOfWeek(int? value) {
-    if (value != null && (value < 0 || value > 4)) {
-      throw ArgumentError('dayOfWeek must be between 0 (Mon) and 4 (Fri)');
+    if (value != null && (value < 1 || value > 5)) {
+      throw ArgumentError('dayOfWeek must be between 0 (Mon) and 5 (Fri)');
     }
     _dayOfWeek = value;
   }

@@ -43,6 +43,11 @@ function(APPLY_STANDARD_SETTINGS TARGET)
   target_compile_options(${TARGET} PRIVATE /EHsc)
   target_compile_definitions(${TARGET} PRIVATE "_HAS_EXCEPTIONS=0")
   target_compile_definitions(${TARGET} PRIVATE "$<$<CONFIG:Debug>:_DEBUG>")
+
+  if(MSVC)
+    # 런타임 라이브러리를 정적으로 링크
+    target_compile_options(${TARGET} PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+  endif()
 endfunction()
 
 # Flutter library and tool build rules.

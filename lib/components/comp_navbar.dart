@@ -20,6 +20,8 @@ class _CompNavbarState extends State<CompNavbar> {
       case "/":
         _selectedIndex = 0;
         break;
+      case "/timestamp":
+        _selectedIndex = 1;
       case "/settings":
         _selectedIndex = 2;
       default:
@@ -44,13 +46,15 @@ class _CompNavbarState extends State<CompNavbar> {
           case 0:
             goRouter.go("/");
             break;
+          case 1:
+            goRouter.go("/timestamp");
           case 2:
             goRouter.go("/settings");
         }
       },
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+        BottomNavigationBarItem(icon: Icon(Icons.history), label: "TimeStamp"),
         BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
       ],
     );
