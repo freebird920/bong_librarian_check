@@ -70,17 +70,14 @@ class TimestampService {
     if (myLocalPath.isError) {
       throw myLocalPath.error!;
     }
-    print("start");
     // 연도 디렉토리 리스트 가져오기
     final yearDirectories = await getYearDirectories();
     for (var year in yearDirectories) {
       // 월별 파일 리스트 가져오기
-      print(year);
       final monthFiles = await getMonthFiles(int.parse(year));
       for (var monthFile in monthFiles) {
         final filePath =
             '${myLocalPath.data}${_localSaperator}timestamps$_localSaperator$year$_localSaperator$_localSaperator$monthFile';
-        print(filePath);
         final file = File(filePath);
         if (file.existsSync()) {
           final fileContent = await file.readAsString();

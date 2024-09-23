@@ -66,7 +66,7 @@ class LibrarianService {
     }
   }
 
-  Future<Result<List<String>>> getYearDirectories() async {
+  Future<Result<List<String>>> getFileListByYear() async {
     try {
       final myLocalPath = await _fileService.localPath;
       if (myLocalPath.error != null) {
@@ -83,7 +83,7 @@ class LibrarianService {
 
       final yearDirectories = await directory
           .list()
-          .where((entity) => entity is Directory)
+          .where((entity) => entity is File)
           .map((entity) => entity.path.split(Platform.pathSeparator).last)
           .toList();
 
