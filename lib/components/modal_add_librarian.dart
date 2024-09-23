@@ -41,7 +41,6 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
         name: _nameController.text,
         studentId: int.tryParse(_studentIdController.value.text) ?? 0,
         enteranceYear: 2034,
-        dayOfWeek: 2,
       );
       librarinaProvider.addLibrarian(librarian);
       ScaffoldMessenger.of(context).showSnackBar(
