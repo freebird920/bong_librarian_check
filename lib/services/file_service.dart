@@ -6,9 +6,20 @@ import 'package:bong_librarian_check/classes/class_result.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FileService {
+  // 1. private 생성자
+  FileService._privateConstructor();
+
+  // 2. static 변수로 유일한 인스턴스 생성
+  static final FileService _instance = FileService._privateConstructor();
+
+  // 3. 외부에서 접근할 수 있는 인스턴스 제공자
+  factory FileService() {
+    return _instance;
+  }
+
   String get _localSaperator => Platform.pathSeparator;
   // 애플리케이션 디렉터리 경로 가져오기
-  Future<Result<String>> get _localPath async {
+  Future<Result<String>> get localPath async {
     try {
       final directory = await getApplicationDocumentsDirectory();
 
@@ -35,7 +46,7 @@ class FileService {
   /// - 파일경로: "${directory.path}/bong_librarian_check"
   Future<Result<File>> localFile(String filePath) async {
     try {
-      final path = await _localPath;
+      final path = await localPath;
       final result = File('${path.data}$_localSaperator$filePath');
       return Result(data: result);
     } catch (e) {
@@ -46,12 +57,12 @@ class FileService {
   }
 
   Future<List<String>> getMonthFiles(int year) async {
-    final localPath = await _localPath;
-    if (localPath.isError) {
-      throw localPath.error!;
+    final myLocalPath = await localPath;
+    if (myLocalPath.isError) {
+      throw myLocalPath.error!;
     }
     final directoryPath =
-        '${localPath.data}${_localSaperator}timestamps$_localSaperator$year';
+        '${myLocalPath.data}${_localSaperator}timestamps$_localSaperator$year';
     final directory = Directory(directoryPath);
 
     // 폴더가 있는지 확인
@@ -72,12 +83,12 @@ class FileService {
   }
 
   Future<List<String>> getYearDirectories() async {
-    final localPath = await _localPath;
-    if (localPath.error != null) {
-      throw localPath.error!;
+    final myLocalPath = await localPath;
+    if (myLocalPath.error != null) {
+      throw myLocalPath.error!;
     }
 
-    final directoryPath = '${localPath.data}${_localSaperator}timestamps';
+    final directoryPath = '${myLocalPath.data}${_localSaperator}timestamps';
     final directory = Directory(directoryPath);
 
     // 폴더가 있는지 확인
@@ -100,9 +111,9 @@ class FileService {
 
   Future<List<LibraryTimestamp>> loadAllTimestamps() async {
     final List<LibraryTimestamp> allTimestamps = [];
-    final localPath = await _localPath;
-    if (localPath.isError) {
-      throw localPath.error!;
+    final myLocalPath = await localPath;
+    if (myLocalPath.isError) {
+      throw myLocalPath.error!;
     }
     print("start");
     // 연도 디렉토리 리스트 가져오기
@@ -113,7 +124,7 @@ class FileService {
       final monthFiles = await getMonthFiles(int.parse(year));
       for (var monthFile in monthFiles) {
         final filePath =
-            '${localPath.data}${_localSaperator}timestamps$_localSaperator$year$_localSaperator$_localSaperator$monthFile';
+            '${myLocalPath.data}${_localSaperator}timestamps$_localSaperator$year$_localSaperator$_localSaperator$monthFile';
         print(filePath);
         final file = File(filePath);
         if (file.existsSync()) {
@@ -130,7 +141,7 @@ class FileService {
   }
 
   Future<void> saveTimestamp(LibraryTimestamp timestamp) async {
-    final localPath = await _localPath;
+    final myLocalPath = await localPath;
 
     print('saveTimestamp');
     print(timestamp.toJson());
@@ -139,7 +150,7 @@ class FileService {
         timestamp.timestamp.month.toString().padLeft(2, '0'); // 01, 02 등
 
     final directoryPath =
-        '${localPath.data}${_localSaperator}timestamps$_localSaperator$yearString';
+        '${myLocalPath.data}${_localSaperator}timestamps$_localSaperator$yearString';
     final filePath =
         '$directoryPath$_localSaperator$yearString$monthString.json';
     print(directoryPath);
@@ -171,7 +182,7 @@ class FileService {
   // 파일에서 Librarians 데이터를 읽어오기
   Future<Result<List<Librarian>>> readLibrarians() async {
     try {
-      final path = await _localPath;
+      final path = await localPath;
       final file = File('${path.data}${_localSaperator}librarians.json');
 
       if (!(await file.exists())) {
@@ -197,7 +208,7 @@ class FileService {
   /// - librarians: List<Librarian>
   Future<Result<File>> writeLibrarians(List<Librarian> librarians) async {
     try {
-      final path = await _localPath;
+      final path = await localPath;
       final jsonString =
           jsonEncode(librarians.map((lib) => lib.toJson).toList());
       final file = File('${path.data}${_localSaperator}librarians.json');

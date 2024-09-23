@@ -1,10 +1,10 @@
 import 'package:bong_librarian_check/classes/class_librarian.dart';
 import 'package:bong_librarian_check/classes/class_result.dart';
-import 'package:bong_librarian_check/services/file_service.dart';
+import 'package:bong_librarian_check/services/librarian_service.dart';
 import 'package:flutter/material.dart';
 
 class ProviderLibrarian with ChangeNotifier {
-  final FileService _fileService = FileService();
+  final LibrarianService _librarianService = LibrarianService();
   List<Librarian> _librarians = [];
   bool _isLoading = false;
   String? _errorMessage;
@@ -20,7 +20,7 @@ class ProviderLibrarian with ChangeNotifier {
     notifyListeners(); // UI 갱신
 
     try {
-      final result = await _fileService.readLibrarians();
+      final result = await _librarianService.readLibrarians();
       if (result.isSuccess && result.data != null) {
         _librarians = result.data!;
       } else if (result.isError) {
@@ -85,7 +85,7 @@ class ProviderLibrarian with ChangeNotifier {
   // Librarian 목록을 파일에 저장
   Future<Result<bool>> _saveLibrarians() async {
     try {
-      await _fileService.writeLibrarians(_librarians);
+      await _librarianService.writeLibrarians(_librarians);
       loadLibrarians();
       return Result(data: true); // 저장 후 다시 로드
     } catch (e) {

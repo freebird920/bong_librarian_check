@@ -29,7 +29,8 @@ class LibrarianListTile extends StatelessWidget {
     return ListTile(
       key: ValueKey(librarian.uuid),
       leading: Text((index + 1).toString()),
-      title: Text("${librarian.studentId.toString()} ${librarian.name}"),
+      title: Text(
+          "[${librarian.enteranceYear}] ${librarian.studentId.toString()} /  ${librarian.name}"),
       subtitle: OutlinedButton(
         onPressed: () {
           openSetDayOfWeekDialog(context: context, librarian: librarian);

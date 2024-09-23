@@ -7,23 +7,34 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-void openAddLibrarian(BuildContext context) {
+enum ModalSetLibrarianType { add, edit }
+
+void openSetLibrarian({
+  required BuildContext context,
+  required ModalSetLibrarianType type,
+}) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
-    builder: (context) => const ModalAddLibrarian(),
+    builder: (context) => ModalSetLibrarian(
+      type: type,
+    ),
   );
 }
 
-class ModalAddLibrarian extends StatefulWidget {
-  const ModalAddLibrarian({super.key});
+class ModalSetLibrarian extends StatefulWidget {
+  final ModalSetLibrarianType type;
+  const ModalSetLibrarian({
+    super.key,
+    required this.type,
+  });
 
   @override
-  State<ModalAddLibrarian> createState() => _ModalAddLibrarianState();
+  State<ModalSetLibrarian> createState() => _ModalSetLibrarianState();
 }
 
-class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
+class _ModalSetLibrarianState extends State<ModalSetLibrarian> {
   // form key
   final _formKey = GlobalKey<FormState>();
 
