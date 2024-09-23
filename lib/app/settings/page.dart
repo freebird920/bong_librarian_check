@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:bong_librarian_check/components/comp_navbar.dart';
+import 'package:bong_librarian_check/services/file_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,7 +22,20 @@ class SettingsPage extends StatelessWidget {
               leading: const Icon(Icons.person),
               title: const Text("Set Librarians"),
               onTap: () => goRouter.push("/settings/set_librarians"),
-            )
+            ),
+            if (Platform.isWindows)
+              ListTile(
+                leading: const Icon(Icons.folder),
+                title: const Text("Open Folder"),
+                onTap: () async {
+                  FileService fileService = FileService();
+                  final path = await fileService.localPath;
+                  if (path.isError || path.isNull) {
+                    throw path.error ?? Exception("Path is null");
+                  }
+                  await Process.run('explorer', [path.data!]);
+                },
+              ),
           ],
         ),
       ),
@@ -41,14 +57,12 @@ class _ListTileThemeState extends State<ListTileTheme> {
   late bool _isDarkMode;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _isDarkMode = false;
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 

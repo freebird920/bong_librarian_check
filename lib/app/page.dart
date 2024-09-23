@@ -36,11 +36,8 @@ class _HomePageState extends State<HomePage> {
     final librarianProvider = Provider.of<ProviderLibrarian>(context);
     final librarians = librarianProvider.data;
     List<Librarian> filteredLibrarians = [];
-    for (var librarian in librarians) {
-      if (librarian.dayOfWeek == now.weekday) {
-        filteredLibrarians.add(librarian);
-      }
-    }
+    filteredLibrarians = librarians;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("HomePage"),

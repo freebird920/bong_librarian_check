@@ -6,18 +6,8 @@ class Librarian {
   final String name;
   final int studentId;
   final int enteranceYear;
-  int? _dayOfWeek;
+  List<int>? workDays;
   String? description;
-
-  // dayOfWeek의 유효성 검사
-  set dayOfWeek(int? value) {
-    if (value != null && (value < 1 || value > 5)) {
-      throw ArgumentError('dayOfWeek must be between 0 (Mon) and 5 (Fri)');
-    }
-    _dayOfWeek = value;
-  }
-
-  int? get dayOfWeek => _dayOfWeek;
 
   // 생성자
   Librarian({
@@ -25,22 +15,21 @@ class Librarian {
     required this.name,
     required this.studentId,
     required this.enteranceYear,
-    int? dayOfWeek,
+    List<int>? workDays,
     this.description,
-  }) : uuid = uuid ?? const Uuid().v4() {
-    this.dayOfWeek = dayOfWeek; // setter를 사용하여 dayOfWeek 설정
-  }
+  })  : uuid = uuid ?? const Uuid().v4(),
+        workDays = workDays ?? []; // workDays를 직접 설정
 
   // JSON 데이터를 Librarian 객체로 변환하는 메서드
   factory Librarian.fromJson(Map<String, dynamic> json) {
     return Librarian(
       uuid: json['uuid'],
-      name: json['name'], // JSON에서 'name' 필드를 가져옴
-      studentId: json['studentId'], // JSON에서 'studentId' 필드를 가져옴
-      enteranceYear: json['enteranceYear'], // JSON에서 'enteranceYear' 필드를 가져옴
-      dayOfWeek: json['dayOfWeek'], // JSON에서 'dayOfWeek' 필드를 가져옴 (nullable)
-      description:
-          json['description'], // JSON에서 'description' 필드를 가져옴 (nullable)
+      name: json['name'],
+      studentId: json['studentId'],
+      enteranceYear: json['enteranceYear'],
+      workDays:
+          json['workDays'] != null ? List<int>.from(json['workDays']) : null,
+      description: json['description'],
     );
   }
 
@@ -51,7 +40,7 @@ class Librarian {
       'name': name,
       'studentId': studentId,
       'enteranceYear': enteranceYear,
-      'dayOfWeek': dayOfWeek,
+      'workDays': workDays,
       'description': description,
     };
   }
