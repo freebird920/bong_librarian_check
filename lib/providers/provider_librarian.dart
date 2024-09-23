@@ -20,7 +20,7 @@ class ProviderLibrarian with ChangeNotifier {
     notifyListeners(); // UI 갱신
 
     try {
-      final result = await _librarianService.readLibrarians();
+      final result = await _librarianService.getAllYearLibrarians();
       if (result.isSuccess && result.data != null) {
         _librarians = result.data!;
       } else if (result.isError) {

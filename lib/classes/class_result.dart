@@ -6,8 +6,8 @@ class Result<T> {
             'Either data or error must be non-null');
 
   // 성공 여부 확인
-  bool get isSuccess => error == null;
-
+  bool get isSuccess => (error == null && data != null);
+  bool get isNull => (error == null && data == null);
   // 실패 여부 확인
   bool get isError => error != null;
 }
