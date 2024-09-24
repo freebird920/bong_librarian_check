@@ -9,7 +9,7 @@ class ProviderTimestamp with ChangeNotifier {
   List<LibraryTimestamp> _timestamps = [];
   String? _errorMessage;
   bool _isLoading = false;
-
+  bool _isFirstLoaded = false;
   List<LibraryTimestamp> get data => _timestamps;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
@@ -25,7 +25,45 @@ class ProviderTimestamp with ChangeNotifier {
       _errorMessage = e.toString();
     } finally {
       _isLoading = false;
+      _isFirstLoaded = true;
       notifyListeners(); // 로딩 상태 종료 알림
+    }
+  }
+
+  /// # getTimestampByDayLuuid
+  /// - 특정 날짜와 이용자의 uuid를 통해 해당 날짜의 timestamp를 필터링하여 반환
+  /// ## @params
+  /// - DateTime thisDay
+  /// - String librarianUuid
+  /// ## Usages
+  /// ```dart
+  /// // timestamps 필터링
+  /// final timestamps = await getTimestampsByDayLuuid(thisDay,uuid);
+  /// if(timestamps.isError) { throw timestamp.error; }
+  /// final LibraryTimestamp latestTimestamp = timestamps.data!.last
+  /// ```
+  Future<Result<List<LibraryTimestamp>>> getTimestampsByDayLuuid({
+    required DateTime thisDay,
+    required String librarianUuid,
+  }) async {
+    try {
+      // 1. 최초 로드 확인 -> 로드 되지 않았으면 로드
+      if (_isFirstLoaded == false) {
+        await loadTimestamps();
+      }
+
+      // 2. 필터링
+      final filteredTimestamps = _timestamps
+          .where(
+              (LibraryTimestamp e) => isSameDay(thisDay, e.timestamp)) // 날짜 필터링
+          .where((LibraryTimestamp e) =>
+              e.librarianUuid == librarianUuid) // librarian uuid 필터링
+          .toList();
+
+      // 3. 결과 값 리턴
+      return Result(data: filteredTimestamps);
+    } catch (e) {
+      return Result(error: e is Exception ? e : Exception(e.toString()));
     }
   }
 

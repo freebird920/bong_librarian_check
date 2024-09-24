@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -83,19 +84,20 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredLibrarians.length,
-                itemBuilder: (context, index) {
-                  final isAttended = timestampProvider
-                          .checkTodayStamp(filteredLibrarians[index].uuid)
-                          .data ??
-                      true;
-                  return LibrarianTile(
-                      thisLibrarain: filteredLibrarians[index],
-                      isAttended: isAttended,
-                      timestampProvider: timestampProvider);
-                },
-              ),
+              child: ListViewLibrarians(filteredLibrarians: filteredLibrarians),
+              // child: ListView.builder(
+              //   itemCount: filteredLibrarians.length,
+              //   itemBuilder: (context, index) {
+              //     final isAttended = timestampProvider
+              //             .checkTodayStamp(filteredLibrarians[index].uuid)
+              //             .data ??
+              //         true;
+              //     return LibrarianTile(
+              //         thisLibrarain: filteredLibrarians[index],
+              //         isAttended: isAttended,
+              //         timestampProvider: timestampProvider);
+              //   },
+              // ),
             ),
           ],
         ),
