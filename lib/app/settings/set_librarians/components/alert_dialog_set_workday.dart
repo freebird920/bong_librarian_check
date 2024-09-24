@@ -65,7 +65,7 @@ class _AlertDialogSetDayOfWeekState extends State<AlertDialogSetDayOfWeek> {
           children: checkedDayOfWeek.keys.map(
             (int e) {
               return CheckboxListTile(
-                title: Text("${dayOfWeekParser(e).data ?? "ERR"}요일"),
+                title: Text("${weekdayParser(e).data ?? "ERR"}요일"),
                 value: checkedDayOfWeek[e],
                 onChanged: (bool? value) {
                   if (value != null) {

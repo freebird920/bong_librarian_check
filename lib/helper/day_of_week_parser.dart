@@ -1,9 +1,9 @@
 import 'package:bong_librarian_check/classes/class_result.dart';
 
-Result<String> dayOfWeekParser(int? intDayOfWeek) {
+Result<String> weekdayParser(int? intWeekday) {
   try {
     String result;
-    switch (intDayOfWeek) {
+    switch (intWeekday) {
       case 1:
         result = "월";
       case 2:

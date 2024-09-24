@@ -1,6 +1,7 @@
 // HomePage.dart
 
 // pub packages
+import 'package:bong_librarian_check/app/home/components/modal_additional_attend.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,8 +33,7 @@ class _HomePageState extends State<HomePage> {
   ListViewLibrariansSegment selectedViewSegment =
       ListViewLibrariansSegment.attention;
 
-  final Result<String> dayOfWeekString =
-      dayOfWeekParser(DateTime.now().weekday);
+  final Result<String> dayOfWeekString = weekdayParser(DateTime.now().weekday);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,9 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.addchart),
-            onPressed: () {},
+            onPressed: () {
+              openAddotionalAttend(context: context);
+            },
           ),
         ],
       ),

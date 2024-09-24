@@ -37,6 +37,9 @@ class _ListViewLibrariansState extends State<ListViewLibrarians> {
 
     // filter librarians based on selected segment
     switch (widget.selectedViewSegment) {
+      case ListViewLibrariansSegment.all:
+        _filteredLibrarins = widget.librarians;
+        break;
       case ListViewLibrariansSegment.attention:
         _filteredLibrarins = widget.librarians.where(
           (e) {
@@ -75,8 +78,11 @@ class _ListViewLibrariansState extends State<ListViewLibrarians> {
           title: Text(
             '[${thisLibrarian.enteranceYear}] ${thisLibrarian.name}',
             style: TextStyle(
-              decoration:
-                  myTimestamps.isEmpty ? null : TextDecoration.lineThrough,
+              decoration: (myTimestamps.isEmpty ||
+                      widget.selectedViewSegment ==
+                          ListViewLibrariansSegment.exit)
+                  ? null
+                  : TextDecoration.lineThrough,
             ),
           ),
           subtitle: Text(thisLibrarian.studentId.toString()),
@@ -84,7 +90,8 @@ class _ListViewLibrariansState extends State<ListViewLibrarians> {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (widget.selectedViewSegment ==
-                  ListViewLibrariansSegment.attention)
+                      ListViewLibrariansSegment.attention ||
+                  widget.selectedViewSegment == ListViewLibrariansSegment.all)
                 IconButton(
                     onPressed: (myTimestamps.isEmpty ||
                             myTimestamps.last.exitTimestamp is DateTime)

@@ -45,7 +45,7 @@ class LibrarianListTile extends StatelessWidget {
               : librarian.workDays!.isNotEmpty
                   ? librarian.workDays!
                       .map(
-                        (e) => dayOfWeekParser(e).data,
+                        (e) => weekdayParser(e).data,
                       )
                       .join(", ")
                   : "설정되지 않음",
