@@ -1,15 +1,20 @@
+import 'package:flutter/material.dart';
+
+// import class
 import 'package:bong_librarian_check/classes/class_library_timestamp.dart';
 import 'package:bong_librarian_check/classes/class_result.dart';
+
+// import helper
 import 'package:bong_librarian_check/helper/helper_daytime.dart';
+
+// import service
 import 'package:bong_librarian_check/services/timestamp_service.dart';
-import 'package:flutter/material.dart';
 
 class ProviderTimestamp with ChangeNotifier {
   final TimestampService _timestampService = TimestampService();
   List<LibraryTimestamp> _timestamps = [];
   String? _errorMessage;
   bool _isLoading = false;
-  bool _isFirstLoaded = false;
   List<LibraryTimestamp> get data => _timestamps;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
@@ -25,7 +30,6 @@ class ProviderTimestamp with ChangeNotifier {
       _errorMessage = e.toString();
     } finally {
       _isLoading = false;
-      _isFirstLoaded = true;
       notifyListeners(); // 로딩 상태 종료 알림
     }
   }
@@ -42,15 +46,12 @@ class ProviderTimestamp with ChangeNotifier {
   /// if(timestamps.isError) { throw timestamp.error; }
   /// final LibraryTimestamp latestTimestamp = timestamps.data!.last
   /// ```
-  Future<Result<List<LibraryTimestamp>>> getTimestampsByDayLuuid({
+  Result<List<LibraryTimestamp>> getTimestampsByDayLibrarianUuid({
     required DateTime thisDay,
     required String librarianUuid,
-  }) async {
+  }) {
     try {
       // 1. 최초 로드 확인 -> 로드 되지 않았으면 로드
-      if (_isFirstLoaded == false) {
-        await loadTimestamps();
-      }
 
       // 2. 필터링
       final filteredTimestamps = _timestamps

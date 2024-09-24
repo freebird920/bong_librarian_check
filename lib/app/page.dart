@@ -26,8 +26,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final DateTime now = DateTime.now();
   _MyViewSegment selectedViewSegment = _MyViewSegment.attention;
+
   final Result<String> dayOfWeekString =
       dayOfWeekParser(DateTime.now().weekday);
+
   @override
   void initState() {
     super.initState();
@@ -41,7 +43,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final timestampProvider = Provider.of<ProviderTimestamp>(context);
     final librarianProvider = Provider.of<ProviderLibrarian>(context);
     final librarians = librarianProvider.data;
     List<Librarian> filteredLibrarians = librarians
@@ -53,14 +54,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          "도서부 출석 체크",
-          style: TextStyle(
-            fontFamily: "NotoSansKR",
-            fontWeight: FontWeight.w700,
-            textBaseline: TextBaseline.ideographic,
-          ),
-        ),
+        title: const Text("도서부 출석 체크"),
       ),
       body: Center(
         child: Column(
@@ -85,19 +79,6 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: ListViewLibrarians(filteredLibrarians: filteredLibrarians),
-              // child: ListView.builder(
-              //   itemCount: filteredLibrarians.length,
-              //   itemBuilder: (context, index) {
-              //     final isAttended = timestampProvider
-              //             .checkTodayStamp(filteredLibrarians[index].uuid)
-              //             .data ??
-              //         true;
-              //     return LibrarianTile(
-              //         thisLibrarain: filteredLibrarians[index],
-              //         isAttended: isAttended,
-              //         timestampProvider: timestampProvider);
-              //   },
-              // ),
             ),
           ],
         ),

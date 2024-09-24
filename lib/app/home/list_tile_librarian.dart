@@ -4,39 +4,73 @@ import 'package:bong_librarian_check/providers/provider_timestamp.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ListViewLibrarians extends StatelessWidget {
+class ListViewLibrarians extends StatefulWidget {
   const ListViewLibrarians({
     super.key,
     required this.filteredLibrarians,
   });
   final List<Librarian> filteredLibrarians;
+
+  @override
+  State<ListViewLibrarians> createState() => _ListViewLibrariansState();
+}
+
+class _ListViewLibrariansState extends State<ListViewLibrarians> {
+  bool _loaded = false;
+  List<LibraryTimestamp> myTimestamps = [];
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ProviderTimestamp timestampProvider =
+          Provider.of<ProviderTimestamp>(context, listen: false);
+      timestampProvider.loadTimestamps();
+      setState(() {
+        _loaded = true;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final filteredLibarains = widget.filteredLibrarians;
+    final ProviderTimestamp timestampProvider =
+        Provider.of<ProviderTimestamp>(context);
     return ListView.builder(
-      itemCount: filteredLibrarians.length,
+      itemCount: filteredLibarains.length,
       itemBuilder: (context, index) {
-        final thisLibrarian = filteredLibrarians[index];
-        final timestampProvider =
-            Provider.of<ProviderTimestamp>(context, listen: false);
-
-        return FutureBuilder(
-          future: timestampProvider.getTimestampsByDayLuuid(
-              thisDay: DateTime.now(), librarianUuid: thisLibrarian.uuid),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const ListTile(title: CircularProgressIndicator());
-            }
-            if (snapshot.hasError) {
-              return const ListTile(title: Text("Error"));
-            }
-            return ListTile(
-              leading: Text(index.toString()),
-              title: Text(
-                  'name: ${thisLibrarian.name} timestampLengt: ${snapshot.data!.data!.length.toString()}'),
-              subtitle: Text(thisLibrarian.studentId.toString()),
-              trailing: const Text("data"),
-            );
-          },
+        final thisLibrarian = widget.filteredLibrarians[index];
+        final myTimestamps = _loaded
+            ? timestampProvider
+                    .getTimestampsByDayLibrarianUuid(
+                        librarianUuid: thisLibrarian.uuid,
+                        thisDay: DateTime.now())
+                    .data ??
+                <LibraryTimestamp>[]
+            : <LibraryTimestamp>[];
+        return ListTile(
+          leading: Text((index + 1).toString()),
+          title: Text('name: ${thisLibrarian.name} timestampLengtH:}'),
+          subtitle: Text(thisLibrarian.studentId.toString()),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                  onPressed: (myTimestamps.isEmpty ||
+                          myTimestamps.last.exitTimestamp is DateTime)
+                      ? () async {
+                          final LibraryTimestamp newTimestamp =
+                              LibraryTimestamp(
+                            librarianUuid: thisLibrarian.uuid,
+                            timestamp: DateTime.now(),
+                          );
+                          await timestampProvider.saveTimestamp(newTimestamp);
+                        }
+                      : null,
+                  icon: const Icon(Icons.add)),
+              IconButton(onPressed: () {}, icon: const Icon(Icons.logout)),
+            ],
+          ),
         );
       },
     );
