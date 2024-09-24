@@ -44,6 +44,12 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("도서부 출석 체크"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.addchart),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: Center(
         child: Column(
