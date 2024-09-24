@@ -72,7 +72,13 @@ class _ListViewLibrariansState extends State<ListViewLibrarians> {
 
         return ListTile(
           leading: Text((index + 1).toString()),
-          title: Text('[${thisLibrarian.enteranceYear}] ${thisLibrarian.name}'),
+          title: Text(
+            '[${thisLibrarian.enteranceYear}] ${thisLibrarian.name}',
+            style: TextStyle(
+              decoration:
+                  myTimestamps.isEmpty ? null : TextDecoration.lineThrough,
+            ),
+          ),
           subtitle: Text(thisLibrarian.studentId.toString()),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
