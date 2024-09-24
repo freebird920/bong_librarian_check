@@ -72,6 +72,20 @@ class ProviderTimestamp with ChangeNotifier {
     }
   }
 
+  Result<List<LibraryTimestamp>> getTodaysTimestamps() {
+    try {
+      final today = DateTime.now();
+      final todayTimestamps = _timestamps
+          .where(
+            (timestamp) => isSameDay(today, timestamp.timestamp),
+          )
+          .toList();
+      return Result(data: todayTimestamps);
+    } catch (e) {
+      return Result(error: e is Exception ? e : Exception(e.toString()));
+    }
+  }
+
   Result<bool> checkTodayStamp(String librarianUuid) {
     try {
       final allTimestamps = _timestamps;

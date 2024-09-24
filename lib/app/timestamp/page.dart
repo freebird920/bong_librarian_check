@@ -109,7 +109,14 @@ class _TimestampPageState extends State<TimestampPage> {
                     leading: Text('${index + 1}'),
                     title: Text(
                         librarian.isSuccess ? librarian.data!.name : 'no user'),
-                    subtitle: Text("Timestamp: ${timestamp.timestamp}"),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Timestamp: ${timestamp.timestamp}"),
+                        Text(
+                            "ExitTimestamp: ${timestamp.exitTimestamp ?? "no"}"),
+                      ],
+                    ),
                   );
                 },
               ),

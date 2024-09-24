@@ -11,7 +11,6 @@ import 'package:bong_librarian_check/providers/provider_librarian.dart';
 import 'package:bong_librarian_check/enums/enum_list_view_librarians_segment.dart';
 
 // Classes
-import 'package:bong_librarian_check/classes/class_librarian.dart';
 import 'package:bong_librarian_check/classes/class_result.dart';
 
 // Components
@@ -40,11 +39,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final librarianProvider = Provider.of<ProviderLibrarian>(context);
     final librarians = librarianProvider.data;
-    List<Librarian> filteredLibrarians = librarians
-        .where(
-          (e) => e.workDays!.contains(now.weekday),
-        )
-        .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -77,13 +71,12 @@ class _HomePageState extends State<HomePage> {
                 });
               },
             ),
-            if (selectedViewSegment == ListViewLibrariansSegment.attention)
-              Expanded(
-                child: ListViewLibrarians(
-                  librarians: filteredLibrarians,
-                  selectedViewSegment: selectedViewSegment,
-                ),
+            Expanded(
+              child: ListViewLibrarians(
+                librarians: librarians,
+                selectedViewSegment: selectedViewSegment,
               ),
+            ),
           ],
         ),
       ),
