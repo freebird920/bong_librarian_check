@@ -1,20 +1,25 @@
 // HomePage.dart
-import 'package:bong_librarian_check/app/home/list_tile_librarian.dart';
-import 'package:bong_librarian_check/providers/provider_timestamp.dart';
+
+// pub packages
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-// Components
-import 'package:bong_librarian_check/classes/class_librarian.dart';
-import 'package:bong_librarian_check/classes/class_result.dart';
-import 'package:bong_librarian_check/components/comp_navbar.dart';
-import 'package:bong_librarian_check/helper/day_of_week_parser.dart';
+// providers
 import 'package:bong_librarian_check/providers/provider_librarian.dart';
 
-enum _MyViewSegment {
-  attention,
-  exit,
-}
+// Enums
+import 'package:bong_librarian_check/enums/enum_list_view_librarians_segment.dart';
+
+// Classes
+import 'package:bong_librarian_check/classes/class_librarian.dart';
+import 'package:bong_librarian_check/classes/class_result.dart';
+
+// Components
+import 'package:bong_librarian_check/app/home/components/list_tile_librarian.dart';
+import 'package:bong_librarian_check/components/comp_navbar.dart';
+
+// helpers
+import 'package:bong_librarian_check/helper/day_of_week_parser.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,21 +30,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final DateTime now = DateTime.now();
-  _MyViewSegment selectedViewSegment = _MyViewSegment.attention;
+  ListViewLibrariansSegment selectedViewSegment =
+      ListViewLibrariansSegment.attention;
 
   final Result<String> dayOfWeekString =
       dayOfWeekParser(DateTime.now().weekday);
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        Provider.of<ProviderLibrarian>(context, listen: false).loadLibrarians();
-        Provider.of<ProviderTimestamp>(context, listen: false).loadTimestamps();
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,21 +60,30 @@ class _HomePageState extends State<HomePage> {
               child: Text("오늘은 ${dayOfWeekString.data}요일 입니다."),
             ),
             SegmentedButton(
-              segments: const <ButtonSegment<_MyViewSegment>>[
+              segments: const <ButtonSegment<ListViewLibrariansSegment>>[
                 ButtonSegment(
-                    label: Text("즐근"), value: _MyViewSegment.attention),
-                ButtonSegment(label: Text("퇴근"), value: _MyViewSegment.exit),
+                  label: Text("즐근"),
+                  value: ListViewLibrariansSegment.attention,
+                ),
+                ButtonSegment(
+                  label: Text("퇴근"),
+                  value: ListViewLibrariansSegment.exit,
+                ),
               ],
-              selected: <_MyViewSegment>{selectedViewSegment},
-              onSelectionChanged: (Set<_MyViewSegment> value) {
+              selected: <ListViewLibrariansSegment>{selectedViewSegment},
+              onSelectionChanged: (Set<ListViewLibrariansSegment> value) {
                 setState(() {
                   selectedViewSegment = value.first;
                 });
               },
             ),
-            Expanded(
-              child: ListViewLibrarians(filteredLibrarians: filteredLibrarians),
-            ),
+            if (selectedViewSegment == ListViewLibrariansSegment.attention)
+              Expanded(
+                child: ListViewLibrarians(
+                  librarians: filteredLibrarians,
+                  selectedViewSegment: selectedViewSegment,
+                ),
+              ),
           ],
         ),
       ),

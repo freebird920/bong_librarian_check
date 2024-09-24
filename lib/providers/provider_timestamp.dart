@@ -19,6 +19,10 @@ class ProviderTimestamp with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
+  ProviderTimestamp() {
+    loadTimestamps();
+  }
+
   Future<void> loadTimestamps() async {
     _isLoading = true;
     notifyListeners(); // 로딩 상태 시작 알림

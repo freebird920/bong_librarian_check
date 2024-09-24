@@ -1,7 +1,7 @@
 name: bong_librarian_check
-description: "A new Flutter project."
+description: "도서부원 출석 체크 앱"
 publish_to: 'none'
-version: 0.1.0
+version: 0.2.0
 
 environment:
   sdk: ^3.5.3

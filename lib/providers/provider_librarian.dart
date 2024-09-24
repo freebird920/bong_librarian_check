@@ -9,6 +9,10 @@ class ProviderLibrarian with ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
 
+  ProviderLibrarian() {
+    loadLibrarians();
+  }
+
   // Getters
   List<Librarian> get data => _librarians;
   bool get isLoading => _isLoading;

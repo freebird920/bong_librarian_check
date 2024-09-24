@@ -1,0 +1,4 @@
+enum ListViewLibrariansSegment {
+  attention,
+  exit,
+}

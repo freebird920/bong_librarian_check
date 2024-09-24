@@ -1,5 +1,6 @@
 import 'package:bong_librarian_check/classes/class_librarian.dart';
 import 'package:bong_librarian_check/classes/class_library_timestamp.dart';
+import 'package:bong_librarian_check/enums/enum_list_view_librarians_segment.dart';
 import 'package:bong_librarian_check/providers/provider_timestamp.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,47 +8,45 @@ import 'package:provider/provider.dart';
 class ListViewLibrarians extends StatefulWidget {
   const ListViewLibrarians({
     super.key,
-    required this.filteredLibrarians,
+    required this.librarians,
+    required this.selectedViewSegment,
   });
-  final List<Librarian> filteredLibrarians;
-
+  final List<Librarian> librarians;
+  final ListViewLibrariansSegment selectedViewSegment;
   @override
   State<ListViewLibrarians> createState() => _ListViewLibrariansState();
 }
 
 class _ListViewLibrariansState extends State<ListViewLibrarians> {
-  bool _loaded = false;
-  List<LibraryTimestamp> myTimestamps = [];
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final ProviderTimestamp timestampProvider =
-          Provider.of<ProviderTimestamp>(context, listen: false);
-      timestampProvider.loadTimestamps();
-      setState(() {
-        _loaded = true;
-      });
-    });
-    super.initState();
-  }
+  List<Librarian> _filteredLibrarins = [];
 
   @override
   Widget build(BuildContext context) {
-    final filteredLibarains = widget.filteredLibrarians;
+    // filter librarians based on selected segment
+    switch (widget.selectedViewSegment) {
+      case ListViewLibrariansSegment.attention:
+        _filteredLibrarins = widget.librarians
+            .where(
+              (e) => e.workDays!.contains(DateTime.now().weekday),
+            )
+            .toList();
+        break;
+      case ListViewLibrariansSegment.exit:
+        break;
+    }
+
     final ProviderTimestamp timestampProvider =
         Provider.of<ProviderTimestamp>(context);
     return ListView.builder(
-      itemCount: filteredLibarains.length,
+      itemCount: _filteredLibrarins.length,
       itemBuilder: (context, index) {
-        final thisLibrarian = widget.filteredLibrarians[index];
-        final myTimestamps = _loaded
-            ? timestampProvider
-                    .getTimestampsByDayLibrarianUuid(
-                        librarianUuid: thisLibrarian.uuid,
-                        thisDay: DateTime.now())
-                    .data ??
-                <LibraryTimestamp>[]
-            : <LibraryTimestamp>[];
+        final thisLibrarian = _filteredLibrarins[index];
+        final myTimestamps = timestampProvider
+                .getTimestampsByDayLibrarianUuid(
+                    librarianUuid: thisLibrarian.uuid, thisDay: DateTime.now())
+                .data ??
+            <LibraryTimestamp>[];
+
         return ListTile(
           leading: Text((index + 1).toString()),
           title: Text('name: ${thisLibrarian.name} timestampLengtH:}'),
