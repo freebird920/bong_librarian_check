@@ -1,6 +1,5 @@
 // HomePage.dart
-import 'dart:math';
-
+import 'package:bong_librarian_check/app/home/list_tile_librarian.dart';
 import 'package:bong_librarian_check/classes/class_library_timestamp.dart';
 import 'package:bong_librarian_check/providers/provider_timestamp.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +12,11 @@ import 'package:bong_librarian_check/components/comp_navbar.dart';
 import 'package:bong_librarian_check/helper/day_of_week_parser.dart';
 import 'package:bong_librarian_check/providers/provider_librarian.dart';
 
+enum _MyViewSegment {
+  attention,
+  exit,
+}
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -22,7 +26,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final DateTime now = DateTime.now();
-
+  _MyViewSegment selectedViewSegment = _MyViewSegment.attention;
   final Result<String> dayOfWeekString =
       dayOfWeekParser(DateTime.now().weekday);
   @override
@@ -30,11 +34,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ProviderLibrarian>(context, listen: false).loadLibrarians();
+      Provider.of<ProviderTimestamp>(context, listen: false).loadTimestamps();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final timestampProvider = Provider.of<ProviderTimestamp>(context);
     final librarianProvider = Provider.of<ProviderLibrarian>(context);
     final librarians = librarianProvider.data;
     List<Librarian> filteredLibrarians = librarians
@@ -60,37 +66,33 @@ class _HomePageState extends State<HomePage> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "오늘은 ${dayOfWeekString.data}요일 입니다.",
-                style: const TextStyle(
-                  fontFamily: "NotoSansKR",
-                  fontWeight: FontWeight.w700,
-                  textBaseline: TextBaseline.ideographic,
-                ),
-              ),
+              child: Text("오늘은 ${dayOfWeekString.data}요일 입니다."),
+            ),
+            SegmentedButton(
+              segments: const <ButtonSegment<_MyViewSegment>>[
+                ButtonSegment(
+                    label: Text("즐근"), value: _MyViewSegment.attention),
+                ButtonSegment(label: Text("퇴근"), value: _MyViewSegment.exit),
+              ],
+              selected: <_MyViewSegment>{selectedViewSegment},
+              onSelectionChanged: (Set<_MyViewSegment> value) {
+                setState(() {
+                  selectedViewSegment = value.first;
+                });
+              },
             ),
             Expanded(
               child: ListView.builder(
                 itemCount: filteredLibrarians.length,
                 itemBuilder: (context, index) {
-                  final timestampProvider =
-                      Provider.of<ProviderTimestamp>(context);
-                  return ListTile(
-                    leading: Text(" ${index + 1}"),
-                    title: Text(filteredLibrarians[index].name),
-                    subtitle: Text(
-                        "Student ID: ${filteredLibrarians[index].studentId}"),
-                    trailing: IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () {
-                          timestampProvider.saveTimestamp(
-                            LibraryTimestamp(
-                              librarianUuid: filteredLibrarians[index].uuid,
-                              timestamp: DateTime.now(),
-                            ),
-                          );
-                        }),
-                  );
+                  final isAttended = timestampProvider
+                          .checkTodayStamp(filteredLibrarians[index].uuid)
+                          .data ??
+                      true;
+                  return LibrarianTile(
+                      thisLibrarain: filteredLibrarians[index],
+                      isAttended: isAttended,
+                      timestampProvider: timestampProvider);
                 },
               ),
             ),

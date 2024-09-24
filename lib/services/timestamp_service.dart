@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bong_librarian_check/classes/class_library_timestamp.dart';
+import 'package:bong_librarian_check/classes/class_result.dart';
 import 'package:bong_librarian_check/services/file_service.dart';
 
 class TimestampService {
@@ -95,8 +96,6 @@ class TimestampService {
   Future<void> saveTimestamp(LibraryTimestamp timestamp) async {
     final myLocalPath = await _fileService.localPath;
 
-    print('saveTimestamp');
-    print(timestamp.toJson());
     final yearString = timestamp.timestamp.year;
     final monthString =
         timestamp.timestamp.month.toString().padLeft(2, '0'); // 01, 02 등
@@ -105,8 +104,6 @@ class TimestampService {
         '${myLocalPath.data}${_localSaperator}timestamps$_localSaperator$yearString';
     final filePath =
         '$directoryPath$_localSaperator$yearString$monthString.json';
-    print(directoryPath);
-    print(filePath);
     // 디렉토리 확인 및 생성
     final directory = Directory(directoryPath);
     if (!directory.existsSync()) {
@@ -129,5 +126,64 @@ class TimestampService {
     // 파일에 다시 저장
     await file.writeAsString(jsonEncode(existingTimestamps),
         mode: FileMode.write);
+  }
+
+  Future<Result<LibraryTimestamp>> getTimestampByUuid(
+      String timesampUuid) async {
+    try {
+      final allTimestamps = await loadAllTimestamps();
+      final timestamp =
+          allTimestamps.firstWhere((element) => element.uuid == timesampUuid);
+      return Result(data: timestamp);
+    } catch (e) {
+      return Result(error: e is Exception ? e : Exception(e.toString()));
+    }
+  }
+
+  Future<Result<LibraryTimestamp>> updateTimestamp({
+    required String timestampUuid,
+    required LibraryTimestamp newTimestamp,
+  }) async {
+    try {
+      final myLocalPath = await _fileService.localPath;
+
+      final yearString = newTimestamp.timestamp.year;
+      final monthString =
+          newTimestamp.timestamp.month.toString().padLeft(2, '0'); // 01, 02 등
+
+      final directoryPath =
+          '${myLocalPath.data}${_localSaperator}timestamps$_localSaperator$yearString';
+      final filePath =
+          '$directoryPath$_localSaperator$yearString$monthString.json';
+      // 디렉토리 확인 및 생성
+      final directory = Directory(directoryPath);
+      if (!directory.existsSync()) {
+        directory.createSync(recursive: true);
+      }
+
+      final file = File(filePath);
+
+      // 기존 파일에서 데이터를 읽어오고 추가
+      List<Map<String, dynamic>> existingTimestamps = [];
+      if (file.existsSync()) {
+        final fileContent = await file.readAsString();
+        existingTimestamps =
+            List<Map<String, dynamic>>.from(jsonDecode(fileContent));
+      }
+
+      // 기존 타임스탬프 제거
+      existingTimestamps
+          .removeWhere((element) => element['uuid'] == timestampUuid);
+
+      // 새 타임스탬프 추가
+      existingTimestamps.add(newTimestamp.toJson());
+
+      // 파일에 다시 저장
+      await file.writeAsString(jsonEncode(existingTimestamps),
+          mode: FileMode.write);
+      return Result(data: newTimestamp);
+    } catch (e) {
+      return Result(error: e is Exception ? e : Exception(e.toString()));
+    }
   }
 }
