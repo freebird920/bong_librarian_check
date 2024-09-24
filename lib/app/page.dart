@@ -1,4 +1,6 @@
 // HomePage.dart
+import 'dart:math';
+
 import 'package:bong_librarian_check/classes/class_library_timestamp.dart';
 import 'package:bong_librarian_check/providers/provider_timestamp.dart';
 import 'package:flutter/material.dart';
@@ -35,35 +37,64 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final librarianProvider = Provider.of<ProviderLibrarian>(context);
     final librarians = librarianProvider.data;
-    List<Librarian> filteredLibrarians = [];
-    filteredLibrarians = librarians;
+    List<Librarian> filteredLibrarians = librarians
+        .where(
+          (e) => e.workDays!.contains(now.weekday),
+        )
+        .toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("HomePage"),
+        centerTitle: true,
+        title: const Text(
+          "도서부 출석 체크",
+          style: TextStyle(
+            fontFamily: "NotoSansKR",
+            fontWeight: FontWeight.w700,
+            textBaseline: TextBaseline.ideographic,
+          ),
+        ),
       ),
       body: Center(
-        child: ListView.builder(
-          itemCount: filteredLibrarians.length,
-          itemBuilder: (context, index) {
-            final timestampProvider = Provider.of<ProviderTimestamp>(context);
-            return ListTile(
-              leading: Text(" ${index + 1}"),
-              title: Text(filteredLibrarians[index].name),
-              subtitle:
-                  Text("Student ID: ${filteredLibrarians[index].studentId}"),
-              trailing: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    timestampProvider.saveTimestamp(
-                      LibraryTimestamp(
-                        librarianUuid: filteredLibrarians[index].uuid,
-                        timestamp: DateTime.now(),
-                      ),
-                    );
-                  }),
-            );
-          },
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "오늘은 ${dayOfWeekString.data}요일 입니다.",
+                style: const TextStyle(
+                  fontFamily: "NotoSansKR",
+                  fontWeight: FontWeight.w700,
+                  textBaseline: TextBaseline.ideographic,
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: filteredLibrarians.length,
+                itemBuilder: (context, index) {
+                  final timestampProvider =
+                      Provider.of<ProviderTimestamp>(context);
+                  return ListTile(
+                    leading: Text(" ${index + 1}"),
+                    title: Text(filteredLibrarians[index].name),
+                    subtitle: Text(
+                        "Student ID: ${filteredLibrarians[index].studentId}"),
+                    trailing: IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          timestampProvider.saveTimestamp(
+                            LibraryTimestamp(
+                              librarianUuid: filteredLibrarians[index].uuid,
+                              timestamp: DateTime.now(),
+                            ),
+                          );
+                        }),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: const CompNavbar(),

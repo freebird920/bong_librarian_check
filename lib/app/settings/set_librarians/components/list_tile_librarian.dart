@@ -1,5 +1,6 @@
 // import from flutter
 import 'package:bong_librarian_check/app/settings/set_librarians/components/alert_dialog_set_workday.dart';
+import 'package:bong_librarian_check/helper/day_of_week_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -38,9 +39,17 @@ class LibrarianListTile extends StatelessWidget {
         onPressed: () {
           openSetDayOfWeekDialog(context: context, librarian: librarian);
         },
-        child: const Text(
-          "${"설정하세요"} ",
-          style: TextStyle(
+        child: Text(
+          librarian.workDays == null
+              ? "설정되지 않음"
+              : librarian.workDays!.isNotEmpty
+                  ? librarian.workDays!
+                      .map(
+                        (e) => dayOfWeekParser(e).data,
+                      )
+                      .join(", ")
+                  : "설정되지 않음",
+          style: const TextStyle(
             fontFamily: "NotoSansKR",
             fontWeight: FontWeight.w500,
             fontSize: 14,

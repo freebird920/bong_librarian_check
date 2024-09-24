@@ -2,6 +2,7 @@ import 'package:bong_librarian_check/app/page.dart';
 import 'package:bong_librarian_check/app/settings/page.dart';
 import 'package:bong_librarian_check/app/settings/set_librarians/page.dart';
 import 'package:bong_librarian_check/app/timestamp/page.dart';
+import 'package:bong_librarian_check/themes/theme_default.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,6 +38,7 @@ class RootLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      theme: defaultTheme,
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
     );
