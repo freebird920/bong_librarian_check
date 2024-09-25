@@ -1,0 +1,1 @@
+enum ModalSetLibrarianType { add, edit }
