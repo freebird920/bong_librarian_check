@@ -12,8 +12,11 @@ dependencies:
   flutter:
     sdk: flutter
   go_router: ^14.2.7
+  http: ^1.2.2
+  package_info_plus: ^8.0.2
   path_provider: ^2.1.4
   provider: ^6.1.2
+  pub_semver: ^2.1.4
   url_launcher: ^6.3.0
   uuid: ^4.5.0
 

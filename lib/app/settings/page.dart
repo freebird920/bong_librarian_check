@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:bong_librarian_check/components/comp_navbar.dart';
 import 'package:bong_librarian_check/services/file_service.dart';
+import 'package:bong_librarian_check/services/version_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -43,6 +45,20 @@ class SettingsPage extends StatelessWidget {
               onTap: () async {
                 const url = "https://blog.naver.com/freebird_han";
                 await launchUrl(Uri.parse(url));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.update),
+              title: const Text("Check for Updates"),
+              onTap: () async {
+                final VersionService versionService = VersionService();
+                final currentVersion = await versionService.getCurrentVersion();
+                final latestVersion = await versionService.getLatestVersion();
+                if (latestVersion.isError) {
+                  throw latestVersion.error ?? Exception("Error");
+                }
+                print("currentVersion: ${currentVersion.toString()}");
+                print("latestversion: ${latestVersion.data.toString()}");
               },
             ),
           ],
