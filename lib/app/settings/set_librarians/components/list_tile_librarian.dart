@@ -27,7 +27,6 @@ class LibrarianListTile extends StatelessWidget {
     return ListTile(
       horizontalTitleGap: 3,
       contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-      hoverColor: Colors.grey[200],
       key: ValueKey(librarian.uuid),
       leading: Text((index + 1).toString()),
       title: Text(
