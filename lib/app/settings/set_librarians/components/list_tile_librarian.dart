@@ -1,6 +1,6 @@
 // import from flutter
 import 'package:bong_librarian_check/app/settings/set_librarians/components/alert_dialog_set_workday.dart';
-import 'package:bong_librarian_check/helper/day_of_week_parser.dart';
+import 'package:bong_librarian_check/helper/weekdayParser.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,7 +53,6 @@ class LibrarianListTile extends StatelessWidget {
             fontFamily: "NotoSansKR",
             fontWeight: FontWeight.w500,
             fontSize: 14,
-            // decoration: TextDecoration.lineThrough,
           ),
         ),
       ),

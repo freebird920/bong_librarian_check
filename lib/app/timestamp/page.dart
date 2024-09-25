@@ -46,20 +46,21 @@ class _TimestampPageState extends State<TimestampPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("data"),
+        centerTitle: true,
+        title: const Text("출석부"),
       ),
       body: Column(
         children: [
           SegmentedButton(
             segments: const <ButtonSegment<_ListViewSegment>>[
               ButtonSegment<_ListViewSegment>(
-                  label: Text("Today"), value: _ListViewSegment.today),
+                  label: Text("오늘"), value: _ListViewSegment.today),
               ButtonSegment<_ListViewSegment>(
-                  label: Text("This Week"), value: _ListViewSegment.week),
+                  label: Text("금주"), value: _ListViewSegment.week),
               ButtonSegment<_ListViewSegment>(
-                  label: Text("This Month"), value: _ListViewSegment.month),
+                  label: Text("금월"), value: _ListViewSegment.month),
               ButtonSegment<_ListViewSegment>(
-                  label: Text("All"), value: _ListViewSegment.all),
+                  label: Text("전체"), value: _ListViewSegment.all),
             ],
             selected: <_ListViewSegment>{selectedListViewSegment},
             onSelectionChanged: (Set<_ListViewSegment> value) {

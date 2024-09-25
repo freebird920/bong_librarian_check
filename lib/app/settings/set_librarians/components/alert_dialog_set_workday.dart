@@ -1,7 +1,7 @@
 import 'package:bong_librarian_check/providers/provider_librarian.dart';
 import 'package:flutter/material.dart';
 import 'package:bong_librarian_check/classes/class_librarian.dart';
-import 'package:bong_librarian_check/helper/day_of_week_parser.dart';
+import 'package:bong_librarian_check/helper/weekdayParser.dart';
 import 'package:provider/provider.dart';
 
 void openSetDayOfWeekDialog({

@@ -1,7 +1,9 @@
 import 'package:bong_librarian_check/app/settings/set_librarians/components/list_tile_librarian.dart';
+import 'package:bong_librarian_check/app/settings/set_librarians/components/modal_upload_excel.dart';
 import 'package:bong_librarian_check/components/modal_add_librarian.dart';
 import 'package:bong_librarian_check/components/comp_navbar.dart';
 import 'package:bong_librarian_check/providers/provider_librarian.dart';
+import 'package:bong_librarian_check/services/excel_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,19 +15,6 @@ class SetLibrarinasPage extends StatefulWidget {
 }
 
 class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ProviderLibrarian>(context, listen: false).loadLibrarians();
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final librarianProvider = Provider.of<ProviderLibrarian>(context);
@@ -39,6 +28,14 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
             onPressed: () {
               librarianProvider.loadLibrarians();
             },
+          ),
+          IconButton(
+            onPressed: () => ExcelService().jsonToExcel(librarianProvider.data),
+            icon: const Icon(Icons.download),
+          ),
+          IconButton(
+            icon: const Icon(Icons.upload_file),
+            onPressed: () => openUploadExcel(context: context),
           ),
           IconButton(
             onPressed: () => openAddLibrarian(context),
