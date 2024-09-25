@@ -1,8 +1,8 @@
 // HomePage.dart
 
 // pub packages
-import 'package:bong_librarian_check/app/home/components/modal_additional_attend.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 // providers
@@ -32,6 +32,18 @@ class _HomePageState extends State<HomePage> {
   final DateTime now = DateTime.now();
   ListViewLibrariansSegment selectedViewSegment =
       ListViewLibrariansSegment.attention;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final librarianProvider =
+          Provider.of<ProviderLibrarian>(context, listen: false);
+      if (librarianProvider.data.isEmpty) {
+        openAlertDialogNoLibrarians(context: context);
+      }
+    });
+  }
 
   final Result<String> dayOfWeekString = weekdayParser(DateTime.now().weekday);
 
@@ -48,7 +60,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: const Icon(Icons.addchart),
             onPressed: () {
-              openAdditionalAttend(context: context);
+              openAlertDialogNoLibrarians(context: context);
             },
           ),
         ],
@@ -89,6 +101,36 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: const CompNavbar(),
+    );
+  }
+}
+
+void openAlertDialogNoLibrarians({required BuildContext context}) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return const AlertDialogNoLibrarians();
+    },
+  );
+}
+
+class AlertDialogNoLibrarians extends StatelessWidget {
+  const AlertDialogNoLibrarians({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text("알림"),
+      content: const Text("현재 도서부 사서가 없습니다. 사서를 추가해주세요."),
+      actions: [
+        TextButton(
+          onPressed: () {
+            GoRouter.of(context).go("/settings/set_librarians");
+            Navigator.pop(context);
+          },
+          child: const Text("추가하러가겠읍니다."),
+        ),
+      ],
     );
   }
 }
