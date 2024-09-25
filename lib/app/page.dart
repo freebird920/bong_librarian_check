@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: const Icon(Icons.addchart),
             onPressed: () {
-              openAddotionalAttend(context: context);
+              openAdditionalAttend(context: context);
             },
           ),
         ],

@@ -1,4 +1,5 @@
 // import pub packages
+import 'package:bong_librarian_check/app/home/components/alert_dialog_multi_attend.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -96,12 +97,23 @@ class _ListViewLibrariansState extends State<ListViewLibrarians> {
                     onPressed: (myTimestamps.isEmpty ||
                             myTimestamps.last.exitTimestamp is DateTime)
                         ? () async {
-                            final LibraryTimestamp newTimestamp =
-                                LibraryTimestamp(
-                              librarianUuid: thisLibrarian.uuid,
-                              timestamp: DateTime.now(),
-                            );
-                            await timestampProvider.saveTimestamp(newTimestamp);
+                            if ((myTimestamps.isNotEmpty &&
+                                (widget.selectedViewSegment ==
+                                        ListViewLibrariansSegment.attention ||
+                                    widget.selectedViewSegment ==
+                                        ListViewLibrariansSegment.all))) {
+                              return openMultiAttend(
+                                  context: context,
+                                  thisLibrarian: thisLibrarian);
+                            } else {
+                              final LibraryTimestamp newTimestamp =
+                                  LibraryTimestamp(
+                                librarianUuid: thisLibrarian.uuid,
+                                timestamp: DateTime.now(),
+                              );
+                              await timestampProvider
+                                  .saveTimestamp(newTimestamp);
+                            }
                           }
                         : null,
                     icon: const Icon(Icons.check)),
@@ -112,7 +124,7 @@ class _ListViewLibrariansState extends State<ListViewLibrarians> {
                             final LibraryTimestamp lastTimestamp =
                                 myTimestamps.last;
                             lastTimestamp.exitTimestamp = DateTime.now();
-                            await timestampProvider
+                            return await timestampProvider
                                 .saveTimestamp(lastTimestamp);
                           }
                         : null,

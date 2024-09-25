@@ -1,15 +1,11 @@
 import 'package:excel/excel.dart' as excel_package;
 
 class CellHeader {
-  CellHeader();
-  Map<int, String> get toMap => {
-        1: 'Enterance Year',
-        2: 'Name',
-        3: 'Student ID',
-        4: 'Work Days',
-        5: 'Description',
-        6: 'UUID**절대직접입력수정금지**',
-      };
+  final List<String> header;
+  CellHeader({required this.header});
+  Map<int, String> get toMap {
+    return header.asMap();
+  }
 }
 
 class CustomCell<T> {
@@ -44,6 +40,15 @@ class CustomCell<T> {
 
 class ExcelService {
   excel_package.Excel _excel() => excel_package.Excel.createExcel();
+  void createHeader() {
+    final excel = _excel();
+    final sheet = excel['Sheet1'];
+    final header = CellHeader(header: [
+      "uuid",
+      "name",
+      "studentId",
+    ]).toMap;
+  }
 
   void createAndSaveExcelFile(List<CustomCell> cells) {
     final excel_package.Excel excel = _excel();

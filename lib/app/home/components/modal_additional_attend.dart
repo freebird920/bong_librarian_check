@@ -4,7 +4,7 @@ import 'package:bong_librarian_check/providers/provider_librarian.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void openAddotionalAttend({
+void openAdditionalAttend({
   required BuildContext context,
 }) {
   showModalBottomSheet(
