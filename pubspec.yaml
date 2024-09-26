@@ -67,7 +67,7 @@ flutter:
           weight: 600
         - asset: assets/fonts/noto_sans_kr/NotoSansKR-Bold.ttf
           weight: 700
-        - asset: assets/fonts/noto_sans_kr/NotoSansKR-ExtraBold.ttf
-          weight: 800
+        # - asset: assets/fonts/noto_sans_kr/NotoSansKR-ExtraBold.ttf
+        #   weight: 800
 
   
