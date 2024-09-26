@@ -124,8 +124,8 @@ class _ListViewLibrariansState extends State<ListViewLibrarians> {
                             final LibraryTimestamp lastTimestamp =
                                 myTimestamps.last;
                             lastTimestamp.exitTimestamp = DateTime.now();
-                            return await timestampProvider
-                                .saveTimestamp(lastTimestamp);
+                            return await timestampProvider.updateTimestamp(
+                                newTimestamp: lastTimestamp);
                           }
                         : null,
                     icon: const Icon(Icons.logout)),
