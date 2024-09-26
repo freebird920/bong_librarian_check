@@ -19,7 +19,6 @@ class SettingsPage extends StatelessWidget {
       body: Center(
         child: ListView(
           children: [
-            const ListTileTheme(),
             ListTile(
               leading: const Icon(Icons.person),
               title: const Text("Set Librarians"),
@@ -53,6 +52,14 @@ class SettingsPage extends StatelessWidget {
               onTap: () async {
                 const url =
                     "https://github.com/freebird920/bong_librarian_check";
+                await launchUrl(Uri.parse(url));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.info_outline_rounded),
+              title: const Text("카카오톡 문의"),
+              onTap: () async {
+                const url = "https://open.kakao.com/o/sXKbtVXf";
                 await launchUrl(Uri.parse(url));
               },
             ),

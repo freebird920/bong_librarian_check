@@ -32,16 +32,6 @@ class ExcelService {
       TextCellValue('9_UUID**절대직접입력수정금지**'),
     ]);
 
-    CellStyle cellStyle = CellStyle(
-      leftBorder: Border(borderStyle: BorderStyle.Thin),
-      rightBorder: Border(borderStyle: BorderStyle.Thin),
-      topBorder: Border(
-          borderStyle: BorderStyle.Thin,
-          borderColorHex: ExcelColor.fromHexString('FFFF0000')),
-      bottomBorder: Border(
-          borderStyle: BorderStyle.Medium,
-          borderColorHex: ExcelColor.fromHexString('FF0000FF')),
-    );
     // JSON 데이터를 행으로 추가
     for (var data in jsonData) {
       sheetObject.appendRow(
@@ -100,7 +90,9 @@ class ExcelService {
       return;
     }
     FilePickerService().pickPathAndSave(
-        data: excelData, fileName: "shit", fileExtention: "xlsx");
+        data: excelData,
+        fileName: "librarians${DateTime.now().toIso8601String()}",
+        fileExtention: "xlsx");
   }
 
   /// 엑셀 파일을 읽어서 List<Map<String, dynamic>> 형태로 변환

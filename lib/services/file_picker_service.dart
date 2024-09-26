@@ -30,11 +30,7 @@ class FilePickerService {
 
       // 파일에 데이터를 작성
       await file.writeAsBytes(data);
-
-      print('파일이 저장되었습니다: $filePath');
-    } else {
-      print('저장 경로가 선택되지 않았습니다.');
-    }
+    } else {}
   }
 
   Future<Uint8List?> pickAndReadExcelFile() async {

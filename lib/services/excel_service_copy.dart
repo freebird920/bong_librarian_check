@@ -40,15 +40,6 @@ class CustomCell<T> {
 
 class ExcelService {
   excel_package.Excel _excel() => excel_package.Excel.createExcel();
-  void createHeader() {
-    final excel = _excel();
-    final sheet = excel['Sheet1'];
-    final header = CellHeader(header: [
-      "uuid",
-      "name",
-      "studentId",
-    ]).toMap;
-  }
 
   void createAndSaveExcelFile(List<CustomCell> cells) {
     final excel_package.Excel excel = _excel();

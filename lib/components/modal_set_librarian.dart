@@ -31,8 +31,8 @@ void openSetLibrarian({
 
 class ModalSetLibrarian extends StatefulWidget {
   final ModalSetLibrarianType type;
-  Librarian? librarian;
-  ModalSetLibrarian({
+  final Librarian? librarian;
+  const ModalSetLibrarian({
     super.key,
     required this.type,
     this.librarian,

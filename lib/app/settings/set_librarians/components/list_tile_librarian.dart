@@ -1,9 +1,8 @@
 // import from flutter
 import 'package:bong_librarian_check/app/settings/set_librarians/components/alert_dialog_set_workday.dart';
 import 'package:bong_librarian_check/classes/class_librarian.dart';
-import 'package:bong_librarian_check/helper/weekdayParser.dart';
+import 'package:bong_librarian_check/helper/weekday_parser.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 // import from lib
 import 'package:bong_librarian_check/app/settings/set_librarians/components/popup_menu_librarian.dart';

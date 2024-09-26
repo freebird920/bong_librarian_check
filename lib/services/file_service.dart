@@ -115,17 +115,14 @@ class FileService {
     if (myLocalPath.isError) {
       throw myLocalPath.error!;
     }
-    print("start");
     // 연도 디렉토리 리스트 가져오기
     final yearDirectories = await getYearDirectories();
     for (var year in yearDirectories) {
       // 월별 파일 리스트 가져오기
-      print(year);
       final monthFiles = await getMonthFiles(int.parse(year));
       for (var monthFile in monthFiles) {
         final filePath =
             '${myLocalPath.data}${_localSaperator}timestamps$_localSaperator$year$_localSaperator$_localSaperator$monthFile';
-        print(filePath);
         final file = File(filePath);
         if (file.existsSync()) {
           final fileContent = await file.readAsString();
@@ -143,8 +140,6 @@ class FileService {
   Future<void> saveTimestamp(LibraryTimestamp timestamp) async {
     final myLocalPath = await localPath;
 
-    print('saveTimestamp');
-    print(timestamp.toJson());
     final yearString = timestamp.timestamp.year;
     final monthString =
         timestamp.timestamp.month.toString().padLeft(2, '0'); // 01, 02 등
@@ -153,8 +148,7 @@ class FileService {
         '${myLocalPath.data}${_localSaperator}timestamps$_localSaperator$yearString';
     final filePath =
         '$directoryPath$_localSaperator$yearString$monthString.json';
-    print(directoryPath);
-    print(filePath);
+
     // 디렉토리 확인 및 생성
     final directory = Directory(directoryPath);
     if (!directory.existsSync()) {

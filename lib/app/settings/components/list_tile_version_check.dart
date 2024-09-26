@@ -23,7 +23,11 @@ class ListTileVersionCheck extends StatelessWidget {
               ? null
               : const Text("업데이트가 필요합니다."),
           onTap: currentVersion == latestVersion || isLoading
-              ? null
+              ? () async {
+                  const url =
+                      "https://github.com/freebird920/bong_librarian_check/releases/latest";
+                  await launchUrl(Uri.parse(url));
+                }
               : () async {
                   const url =
                       "https://github.com/freebird920/bong_librarian_check/releases/latest";

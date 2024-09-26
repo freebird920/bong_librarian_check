@@ -20,7 +20,7 @@ import 'package:bong_librarian_check/app/home/components/list_tile_librarian.dar
 import 'package:bong_librarian_check/components/comp_navbar.dart';
 
 // helpers
-import 'package:bong_librarian_check/helper/weekdayParser.dart';
+import 'package:bong_librarian_check/helper/weekday_parser.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

@@ -27,7 +27,9 @@ class ModalUploadExcel extends StatelessWidget {
       widthFactor: 0.9,
       child: Column(
         children: [
-          const Text("data"),
+          const Text("excel 파일로 추가",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 20),
           Expanded(
               child: ListView(
             children: [
@@ -52,7 +54,6 @@ class ModalUploadExcel extends StatelessWidget {
             onPressed: () async {
               final getLibrarians = await ExcelService().excelToJson();
               for (var element in getLibrarians) {
-                print(element.name);
                 librarianProvider.addLibrarian(element);
               }
             },
