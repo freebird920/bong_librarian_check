@@ -1,6 +1,7 @@
 // HomePage.dart
 
 // pub packages
+import 'package:bong_librarian_check/app/home/components/modal_additional_attend.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: const Icon(Icons.addchart),
             onPressed: () {
-              openAlertDialogNoLibrarians(context: context);
+              openAdditionalAttend(context: context);
             },
           ),
         ],
