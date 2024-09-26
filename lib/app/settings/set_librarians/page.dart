@@ -39,7 +39,7 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
               _librarianProvider.data.isEmpty &&
               !_isOpendDialog) {
             _isOpendDialog = true;
-            print("no lib");
+            openAlertDialogNoLibrarians(context: context);
           }
         };
 
@@ -104,6 +104,49 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
           },
         ),
       ),
+    );
+  }
+}
+
+void openAlertDialogNoLibrarians({required BuildContext context}) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return const AlertDialogFirstAdd();
+    },
+  );
+}
+
+class AlertDialogFirstAdd extends StatelessWidget {
+  const AlertDialogFirstAdd({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text("알림"),
+      content: const Text("명단이 없습니다. 추가해주세요."),
+      actions: [
+        TextButton(
+            child: const Text("입력해서 추가"),
+            onPressed: () {
+              Navigator.pop(context);
+              openSetLibrarian(
+                  context: context, type: ModalSetLibrarianType.add);
+            }),
+        TextButton(
+          child: const Text("엑셀 파일로 추가"),
+          onPressed: () {
+            Navigator.pop(context);
+            openUploadExcel(context: context);
+          },
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text("취소"),
+        )
+      ],
     );
   }
 }

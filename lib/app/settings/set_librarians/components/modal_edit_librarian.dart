@@ -56,29 +56,6 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
     _formKey.currentState?.reset();
   }
 
-  // 폼 제출 처리
-  void _submitForm() async {
-    if (_formKey.currentState?.validate() ?? false) {
-      // 유효성 검사가 통과되었을 때 폼 제출 로직 실행
-      final librarinaProvider =
-          Provider.of<ProviderLibrarian>(context, listen: false);
-
-      final Librarian librarian = Librarian(
-        name: _nameController.text,
-        studentId: _studentIdController.value.text,
-        enteranceYear: 2034,
-      );
-      librarinaProvider.addLibrarian(librarian);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("add"),
-        ),
-      );
-      // FORM 초기화
-      _formKey.currentState?.reset();
-    }
-  }
-
   @override
   void initState() {
     super.initState();
