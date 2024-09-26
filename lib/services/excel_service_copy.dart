@@ -45,13 +45,6 @@ class ExcelService {
     final excel_package.Excel excel = _excel();
     final sheet = excel['Sheet1'];
 
-    void addRows() {
-      for (final cell in cells) {
-        sheet.cell(cell.cellIndex).value = cell.cellValue;
-        sheet.cell(cell.cellIndex).cellStyle = cell.style;
-      }
-    }
-
     for (final cell in cells) {
       sheet.cell(cell.cellIndex).value = cell.cellValue;
       sheet.cell(cell.cellIndex).cellStyle = cell.style;
