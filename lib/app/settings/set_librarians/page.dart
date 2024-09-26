@@ -49,7 +49,7 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
           ),
           IconButton(
             onPressed: () => openSetLibrarian(
-                context: context, type: ModalSetLibrarianType.edit),
+                context: context, type: ModalSetLibrarianType.add),
             icon: const Icon(Icons.add),
           ),
         ],
