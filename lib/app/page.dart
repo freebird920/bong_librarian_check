@@ -30,33 +30,48 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final DateTime now = DateTime.now();
+  late ProviderLibrarian _librarianProvider;
+  late VoidCallback _librarianProviderListener;
+  bool _dialogOpened = false;
   ListViewLibrariansSegment selectedViewSegment =
       ListViewLibrariansSegment.attention;
+
+  // 변수 선언
+
+  // initState
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        final librarianProvider =
+        _librarianProvider =
             Provider.of<ProviderLibrarian>(context, listen: false);
-        if (!librarianProvider.isLoading && librarianProvider.data.isEmpty) {
-          librarianProvider.loadLibrarians();
+        if (!_librarianProvider.isLoading && _librarianProvider.data.isEmpty) {
+          _librarianProvider.loadLibrarians();
         }
-        // 로딩 상태를 감지하는 리스너 추가
-        librarianProvider.addListener(() {
-          if (!librarianProvider.isLoading && librarianProvider.data.isEmpty) {
-            // 로딩이 완료되고 데이터가 비어있을 때 다이얼로그 표시
-            openAlertDialogNoLibrarians(context: context);
+        _librarianProviderListener = () {
+          if (_librarianProvider.isLoading == false &&
+              _librarianProvider.data.isEmpty) {
+            _dialogOpened == false
+                ? openAlertDialogNoLibrarians(context: context)
+                : null;
+            _dialogOpened = true;
           }
-        });
+        };
+
+        // 로딩 상태를 감지하는 리스너 추가
+        _librarianProvider.addListener(_librarianProviderListener);
 
         // 만약 처음부터 로딩이 끝나있다면 바로 다이얼로그를 보여줌
-
-        librarianProvider.removeListener(() {});
       },
     );
+  }
+
+  @override
+  void dispose() {
+    // 리스너 제거
+    _librarianProvider.removeListener(_librarianProviderListener);
+    super.dispose();
   }
 
   final Result<String> dayOfWeekString = weekdayParser(DateTime.now().weekday);
@@ -139,8 +154,8 @@ class AlertDialogNoLibrarians extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            GoRouter.of(context).go("/settings/set_librarians");
             Navigator.pop(context);
+            GoRouter.of(context).go("/settings/set_librarians");
           },
           child: const Text("추가하러가겠읍니다."),
         ),

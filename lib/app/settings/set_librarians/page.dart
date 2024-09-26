@@ -16,11 +16,46 @@ class SetLibrarinasPage extends StatefulWidget {
 }
 
 class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
+  // 변수 선언
   final ScrollController _scrollController = ScrollController();
+  late ProviderLibrarian _librarianProvider;
+  late VoidCallback _librarianProviderListender;
+  bool _isOpendDialog = false;
+
+  // initState
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        // librarianProvider 할당
+        _librarianProvider =
+            Provider.of<ProviderLibrarian>(context, listen: false);
+        if (!_librarianProvider.isLoading && _librarianProvider.data.isEmpty) {
+          _librarianProvider.loadLibrarians();
+        }
+
+        _librarianProviderListender = () {
+          if (_librarianProvider.isLoading == false &&
+              _librarianProvider.data.isEmpty &&
+              !_isOpendDialog) {
+            _isOpendDialog = true;
+            print("no lib");
+          }
+        };
+
+        // 로딩 상태를 감지하는 리스너 추가
+        _librarianProvider.addListener(_librarianProviderListender);
+
+        // 만약 처음부터 로딩이 끝나있다면 바로 다이얼로그를 보여줌
+      },
+    );
+    super.initState();
+  }
+
   @override
   void dispose() {
+    _librarianProvider.removeListener(_librarianProviderListender);
     _scrollController.dispose();
-
     super.dispose();
   }
 
