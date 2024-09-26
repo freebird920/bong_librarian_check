@@ -20,6 +20,7 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
   @override
   void dispose() {
     _scrollController.dispose();
+
     super.dispose();
   }
 
@@ -48,7 +49,7 @@ class _SetLibrarinasPageState extends State<SetLibrarinasPage> {
           ),
           IconButton(
             onPressed: () => openSetLibrarian(
-                context: context, type: ModalSetLibrarianType.add),
+                context: context, type: ModalSetLibrarianType.edit),
             icon: const Icon(Icons.add),
           ),
         ],

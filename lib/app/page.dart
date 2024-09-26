@@ -34,15 +34,28 @@ class _HomePageState extends State<HomePage> {
       ListViewLibrariansSegment.attention;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final librarianProvider =
-          Provider.of<ProviderLibrarian>(context, listen: false);
-      if (librarianProvider.data.isEmpty) {
-        openAlertDialogNoLibrarians(context: context);
-      }
-    });
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        final librarianProvider =
+            Provider.of<ProviderLibrarian>(context, listen: false);
+        if (!librarianProvider.isLoading && librarianProvider.data.isEmpty) {
+          librarianProvider.loadLibrarians();
+        }
+        // 로딩 상태를 감지하는 리스너 추가
+        librarianProvider.addListener(() {
+          if (!librarianProvider.isLoading && librarianProvider.data.isEmpty) {
+            // 로딩이 완료되고 데이터가 비어있을 때 다이얼로그 표시
+            openAlertDialogNoLibrarians(context: context);
+          }
+        });
+
+        // 만약 처음부터 로딩이 끝나있다면 바로 다이얼로그를 보여줌
+
+        librarianProvider.removeListener(() {});
+      },
+    );
   }
 
   final Result<String> dayOfWeekString = weekdayParser(DateTime.now().weekday);

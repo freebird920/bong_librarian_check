@@ -1,5 +1,6 @@
 // import libraries
 import 'package:bong_librarian_check/providers/provider_timestamp.dart';
+import 'package:bong_librarian_check/providers/provider_version.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => ProviderLibrarian()),
         ChangeNotifierProvider(create: (_) => ProviderTimestamp()),
+        ChangeNotifierProvider(create: (_) => ProviderVersion()),
       ],
       child: const RootLayout(),
     ),

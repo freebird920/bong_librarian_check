@@ -1,11 +1,10 @@
 import 'dart:io';
 
+import 'package:bong_librarian_check/app/settings/components/list_tile_version_check.dart';
 import 'package:bong_librarian_check/components/comp_navbar.dart';
 import 'package:bong_librarian_check/services/file_service.dart';
-import 'package:bong_librarian_check/services/version_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pub_semver/pub_semver.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -39,26 +38,22 @@ class SettingsPage extends StatelessWidget {
                   await Process.run('explorer', [path.data!]);
                 },
               ),
+            const ListTileVersionCheck(),
             ListTile(
               leading: const Icon(Icons.festival),
-              title: const Text("DeveloperHomePage"),
+              title: const Text("개발자 블로그"),
               onTap: () async {
                 const url = "https://blog.naver.com/freebird_han";
                 await launchUrl(Uri.parse(url));
               },
             ),
             ListTile(
-              leading: const Icon(Icons.update),
-              title: const Text("Check for Updates"),
+              leading: const Icon(Icons.code),
+              title: const Text("깃허브"),
               onTap: () async {
-                final VersionService versionService = VersionService();
-                final currentVersion = await versionService.getCurrentVersion();
-                final latestVersion = await versionService.getLatestVersion();
-                if (latestVersion.isError) {
-                  throw latestVersion.error ?? Exception("Error");
-                }
-                print("currentVersion: ${currentVersion.toString()}");
-                print("latestversion: ${latestVersion.data.toString()}");
+                const url =
+                    "https://github.com/freebird920/bong_librarian_check";
+                await launchUrl(Uri.parse(url));
               },
             ),
           ],
