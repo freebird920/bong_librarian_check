@@ -1,7 +1,7 @@
 name: bong_librarian_check
 description: "도서부원 출석 체크 앱"
 publish_to: 'none'
-version: 0.4.1
+version: 0.4.3
 
 environment:
   sdk: ^3.5.3
@@ -29,6 +29,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/sounds/
+    - assets/excels/librarian_form_example.xlsx
   fonts:
     - family: IBMPlexMono
       fonts:

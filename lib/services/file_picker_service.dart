@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
@@ -33,5 +35,27 @@ class FilePickerService {
     } else {
       print('저장 경로가 선택되지 않았습니다.');
     }
+  }
+
+  Future<Uint8List?> pickAndReadExcelFile() async {
+    // 파일 선택 (엑셀 파일만)
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['xlsx'],
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      // 선택한 파일 경로 가져오기
+      final filePath = result.files.single.path;
+
+      if (filePath != null) {
+        // 파일 읽기
+        final file = File(filePath);
+        return await file.readAsBytes();
+      }
+    }
+
+    // 파일을 선택하지 않았거나 읽을 수 없으면 null 반환
+    return null;
   }
 }

@@ -40,7 +40,7 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
 
       final Librarian librarian = Librarian(
         name: _nameController.text,
-        studentId: int.tryParse(_studentIdController.value.text) ?? 0,
+        studentId: _studentIdController.value.text,
         enteranceYear: int.tryParse(_enteranceYearController.text) ?? 0,
       );
       librarinaProvider.addLibrarian(librarian);

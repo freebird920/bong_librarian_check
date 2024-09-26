@@ -43,7 +43,7 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
     final Librarian librarian = Librarian(
       uuid: uuid,
       name: _nameController.text,
-      studentId: int.tryParse(_studentIdController.value.text) ?? 0,
+      studentId: _studentIdController.value.text,
       enteranceYear: 2034,
     );
     librarinaProvider.updateLibrarian(librarian);
@@ -65,7 +65,7 @@ class _ModalAddLibrarianState extends State<ModalAddLibrarian> {
 
       final Librarian librarian = Librarian(
         name: _nameController.text,
-        studentId: int.tryParse(_studentIdController.value.text) ?? 0,
+        studentId: _studentIdController.value.text,
         enteranceYear: 2034,
       );
       librarinaProvider.addLibrarian(librarian);

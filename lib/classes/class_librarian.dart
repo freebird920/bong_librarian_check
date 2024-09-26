@@ -4,7 +4,7 @@ import 'package:uuid/uuid.dart';
 class Librarian {
   final String uuid;
   final String name;
-  final int studentId;
+  final String studentId;
   final int enteranceYear;
   List<int>? workDays;
   String? description;
@@ -25,7 +25,7 @@ class Librarian {
     return Librarian(
       uuid: json['uuid'],
       name: json['name'],
-      studentId: json['studentId'],
+      studentId: json['studentId'].toString(),
       enteranceYear: json['enteranceYear'],
       workDays:
           json['workDays'] != null ? List<int>.from(json['workDays']) : null,

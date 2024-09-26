@@ -96,31 +96,27 @@ class _TimestampPageState extends State<TimestampPage> {
             },
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: ListView.builder(
-                reverse: true,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: _filteredTimestamps.length,
-                itemBuilder: (context, index) {
-                  final timestamp = _filteredTimestamps[index];
-                  final librarian =
-                      librarianProvider.getLibrarian(timestamp.librarianUuid);
-                  return ListTile(
-                    leading: Text('${index + 1}'),
-                    title: Text(
-                        librarian.isSuccess ? librarian.data!.name : 'no user'),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Timestamp: ${timestamp.timestamp}"),
-                        Text(
-                            "ExitTimestamp: ${timestamp.exitTimestamp ?? "no"}"),
-                      ],
-                    ),
-                  );
-                },
-              ),
+            child: ListView.builder(
+              reverse: true,
+              scrollDirection: Axis.vertical,
+              itemCount: _filteredTimestamps.length,
+              itemBuilder: (context, index) {
+                final timestamp = _filteredTimestamps[index];
+                final librarian =
+                    librarianProvider.getLibrarian(timestamp.librarianUuid);
+                return ListTile(
+                  leading: Text('${index + 1}'),
+                  title: Text(
+                      librarian.isSuccess ? librarian.data!.name : 'no user'),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Timestamp: ${timestamp.timestamp}"),
+                      Text("ExitTimestamp: ${timestamp.exitTimestamp ?? "no"}"),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
         ],

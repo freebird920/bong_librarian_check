@@ -1,6 +1,7 @@
 import 'package:bong_librarian_check/classes/class_librarian.dart';
 import 'package:bong_librarian_check/services/file_picker_service.dart';
 import 'package:excel/excel.dart';
+import 'package:uuid/uuid.dart';
 
 class CustomCell<T> {
   final int columnIndex;
@@ -47,7 +48,7 @@ class ExcelService {
         [
           TextCellValue(data.uuid),
           TextCellValue(data.name),
-          IntCellValue(data.studentId),
+          TextCellValue(data.studentId),
           IntCellValue(data.enteranceYear),
           TextCellValue(
               data.description ?? '') // description이 null일 경우 빈 문자열 처리
@@ -100,5 +101,52 @@ class ExcelService {
     }
     FilePickerService().pickPathAndSave(
         data: excelData, fileName: "shit", fileExtention: "xlsx");
+  }
+
+  /// 엑셀 파일을 읽어서 List<Map<String, dynamic>> 형태로 변환
+  Future<List<Librarian>> excelToJson() async {
+    // 엑셀 파일을 선택
+    final fileData = await FilePickerService().pickAndReadExcelFile();
+
+    if (fileData == null) {
+      return [];
+    }
+
+    // 엑셀 파일을 읽기
+    final excel = Excel.decodeBytes(fileData);
+    final Sheet? sheet = excel.sheets[excel.sheets.keys.first];
+
+    // 데이터 파싱
+    List<Map<String, dynamic>> dataFromFile = [];
+
+    if (sheet != null) {
+      // 첫 행은 헤더이므로 스킵
+      for (int rowIndex = 1; rowIndex < sheet.maxRows; rowIndex++) {
+        final row = sheet.row(rowIndex);
+
+        // 각 셀의 값을 가져와 필드 매핑
+        if (row.length >= 3) {
+          final enterenceYear = row[0]?.value?.toString();
+          final studentId = row[1]?.value?.toString();
+          final name = row[2]?.value?.toString();
+
+          // 맵에 추가
+          dataFromFile.add({
+            'name': name,
+            'studentId': studentId,
+            'enterenceYear': enterenceYear,
+          });
+        }
+      }
+    }
+    List<Librarian> librarians = dataFromFile
+        .map((data) => Librarian(
+              uuid: const Uuid().v4(),
+              name: data['name'] ?? '',
+              studentId: data['studentId'] ?? '',
+              enteranceYear: int.tryParse(data['enterenceYear'] ?? '') ?? 0,
+            ))
+        .toList();
+    return librarians;
   }
 }
