@@ -27,11 +27,49 @@ class ProviderPreference with ChangeNotifier {
     return _preferenceService.getPrefBool(key);
   }
 
+  int? getPrefInt(String key) {
+    return _preferenceService.getPrefInt(key);
+  }
+
+  String? getPrefString(String key) {
+    return _preferenceService.getPrefString(key);
+  }
+
   Future<Result<bool>> setPrefBool(
       {required String key, required bool value}) async {
     try {
       final result =
           await _preferenceService.setPrefBool(key: key, value: value);
+      if (result.isError || result.error != null) throw result.error!;
+      if (result.isNull) throw Exception("result is null");
+      return Result(data: result.data);
+    } catch (e) {
+      return Result(error: e is Exception ? e : Exception(e.toString()));
+    } finally {
+      notifyListeners(); // UI 갱신
+    }
+  }
+
+  Future<Result<bool>> setPrefString(
+      {required String key, required String value}) async {
+    try {
+      final result =
+          await _preferenceService.setPrefString(key: key, value: value);
+      if (result.isError || result.error != null) throw result.error!;
+      if (result.isNull) throw Exception("result is null");
+      return Result(data: result.data);
+    } catch (e) {
+      return Result(error: e is Exception ? e : Exception(e.toString()));
+    } finally {
+      notifyListeners(); // UI 갱신
+    }
+  }
+
+  Future<Result<bool>> setPrefInt(
+      {required String key, required int value}) async {
+    try {
+      final result =
+          await _preferenceService.setPrefInt(key: key, value: value);
       if (result.isError || result.error != null) throw result.error!;
       if (result.isNull) throw Exception("result is null");
       return Result(data: result.data);

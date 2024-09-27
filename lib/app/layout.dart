@@ -4,7 +4,6 @@ import 'package:bong_librarian_check/app/settings/set_librarians/page.dart';
 import 'package:bong_librarian_check/app/settings/set_theme/page.dart';
 import 'package:bong_librarian_check/app/timestamp/page.dart';
 import 'package:bong_librarian_check/providers/provider_preference.dart';
-import 'package:bong_librarian_check/themes/theme_default.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -48,10 +47,12 @@ class RootLayout extends StatelessWidget {
         builder: (context, preferenceProvider, child) {
       final bool darkMode =
           preferenceProvider.getPrefBool("dark_mode") ?? false;
+      final int? myColorScheme = preferenceProvider.getPrefInt("theme_color");
       return MaterialApp.router(
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.indigo,
+            seedColor: Color(
+                myColorScheme ?? const Color.fromARGB(255, 110, 243, 33).value),
             brightness: darkMode ? Brightness.dark : Brightness.light,
           ),
           // canvasColor: myColorScheme.surface,

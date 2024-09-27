@@ -44,6 +44,19 @@ class PreferenceService {
     }
   }
 
+  Future<Result<bool>> setPrefInt(
+      {required String key, required int value}) async {
+    try {
+      if (_prefs == null) {
+        await initPrefs();
+      }
+      final result = await _prefs?.setInt(key, value);
+      return Result(data: result ?? false);
+    } catch (e) {
+      return Result(error: e is Exception ? e : Exception(e.toString()));
+    }
+  }
+
   String? getPrefString(String key) {
     if (_prefs == null) {
       return null;
@@ -56,5 +69,12 @@ class PreferenceService {
       return null;
     }
     return _prefs?.getBool(key);
+  }
+
+  int? getPrefInt(String key) {
+    if (_prefs == null) {
+      return null;
+    }
+    return _prefs?.getInt(key);
   }
 }
