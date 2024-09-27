@@ -24,6 +24,11 @@ class SettingsPage extends StatelessWidget {
               title: const Text("Set Librarians"),
               onTap: () => goRouter.push("/settings/set_librarians"),
             ),
+            ListTile(
+              leading: const Icon(Icons.palette),
+              title: const Text("Set Theme"),
+              onTap: () => goRouter.push("/settings/set_theme"),
+            ),
             if (Platform.isWindows)
               ListTile(
                 leading: const Icon(Icons.folder),
