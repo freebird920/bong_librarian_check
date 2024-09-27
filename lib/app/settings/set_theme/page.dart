@@ -11,6 +11,7 @@ class SetThemePage extends StatelessWidget {
   Widget build(BuildContext context) {
     ProviderPreference providerPreference =
         Provider.of<ProviderPreference>(context);
+
     void showSnackbar(String msg) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }

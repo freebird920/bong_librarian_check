@@ -55,13 +55,7 @@ class RootLayout extends StatelessWidget {
                 myColorScheme ?? const Color.fromARGB(255, 110, 243, 33).value),
             brightness: darkMode ? Brightness.dark : Brightness.light,
           ),
-          // canvasColor: myColorScheme.surface,
-          // scaffoldBackgroundColor: myColorScheme.surface,
-          // focusColor: myColorScheme.inversePrimary,
-
           fontFamily: "NotoSansKR",
-
-          // primaryColor: const Color(0xFF3F51B5),
         ),
         debugShowCheckedModeBanner: false,
         routerConfig: _router,

@@ -1,7 +1,6 @@
 // HomePage.dart
 
 // pub packages
-import 'package:bong_librarian_check/app/home/components/modal_additional_attend.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +15,9 @@ import 'package:bong_librarian_check/enums/enum_list_view_librarians_segment.dar
 import 'package:bong_librarian_check/classes/class_result.dart';
 
 // Components
-import 'package:bong_librarian_check/app/home/components/list_tile_librarian.dart';
 import 'package:bong_librarian_check/components/comp_navbar.dart';
+import 'package:bong_librarian_check/app/home/components/list_tile_librarian.dart';
+import 'package:bong_librarian_check/app/home/components/modal_additional_attend.dart';
 
 // helpers
 import 'package:bong_librarian_check/helper/weekday_parser.dart';
@@ -35,8 +35,6 @@ class _HomePageState extends State<HomePage> {
   bool _dialogOpened = false;
   ListViewLibrariansSegment selectedViewSegment =
       ListViewLibrariansSegment.attention;
-
-  // 변수 선언
 
   // initState
   @override
@@ -78,8 +76,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final librarianProvider = Provider.of<ProviderLibrarian>(context);
-    final librarians = librarianProvider.data;
+    final librarians = _librarianProvider.data;
 
     return Scaffold(
       appBar: AppBar(
@@ -114,10 +111,12 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
               selected: <ListViewLibrariansSegment>{selectedViewSegment},
-              onSelectionChanged: (Set<ListViewLibrariansSegment> value) {
-                setState(() {
-                  selectedViewSegment = value.first;
-                });
+              onSelectionChanged: (Set<ListViewLibrariansSegment> selection) {
+                setState(
+                  () {
+                    selectedViewSegment = selection.first;
+                  },
+                );
               },
             ),
             Expanded(
