@@ -1,12 +1,19 @@
-import 'package:bong_librarian_check/app/page.dart';
+// import flutter
+import 'package:flutter/material.dart';
+
+// import pub packages
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+// import providers
+import 'package:bong_librarian_check/providers/provider_preference.dart';
+
+// import routes
 import 'package:bong_librarian_check/app/settings/page.dart';
 import 'package:bong_librarian_check/app/settings/set_librarians/page.dart';
 import 'package:bong_librarian_check/app/settings/set_theme/page.dart';
 import 'package:bong_librarian_check/app/timestamp/page.dart';
-import 'package:bong_librarian_check/providers/provider_preference.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import 'package:bong_librarian_check/app/page.dart';
 
 // Set Routes
 final List<RouteBase> _routes = <RouteBase>[
@@ -44,22 +51,23 @@ class RootLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ProviderPreference>(
-        builder: (context, preferenceProvider, child) {
-      final bool darkMode =
-          preferenceProvider.getPrefBool("dark_mode") ?? false;
-      final int? myColorScheme = preferenceProvider.getPrefInt("theme_color");
-      return MaterialApp.router(
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Color(
-                myColorScheme ?? const Color.fromARGB(255, 110, 243, 33).value),
-            brightness: darkMode ? Brightness.dark : Brightness.light,
+      builder: (context, preferenceProvider, child) {
+        final bool darkMode =
+            preferenceProvider.getPrefBool("dark_mode") ?? false;
+        final int? myColorScheme = preferenceProvider.getPrefInt("theme_color");
+        return MaterialApp.router(
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Color(myColorScheme ??
+                  const Color.fromARGB(255, 110, 243, 33).value),
+              brightness: darkMode ? Brightness.dark : Brightness.light,
+            ),
+            fontFamily: "NotoSansKR",
           ),
-          fontFamily: "NotoSansKR",
-        ),
-        debugShowCheckedModeBanner: false,
-        routerConfig: _router,
-      );
-    });
+          debugShowCheckedModeBanner: false,
+          routerConfig: _router,
+        );
+      },
+    );
   }
 }
