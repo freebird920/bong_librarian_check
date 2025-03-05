@@ -59,7 +59,7 @@ class RootLayout extends StatelessWidget {
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
               seedColor: Color(myColorScheme ??
-                  const Color.fromARGB(255, 110, 243, 33).value),
+                  const Color.fromARGB(255, 110, 243, 33).toARGB32()),
               brightness: darkMode ? Brightness.dark : Brightness.light,
             ),
             fontFamily: "NotoSansKR",

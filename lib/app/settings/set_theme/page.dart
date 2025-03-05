@@ -105,8 +105,8 @@ class _MyPickerState extends State<MyPicker> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       providerPreference =
           Provider.of<ProviderPreference>(context, listen: false);
-      final int themeColor =
-          providerPreference.getPrefInt("theme_color") ?? Colors.blue.value;
+      final int themeColor = providerPreference.getPrefInt("theme_color") ??
+          Colors.blue.toARGB32();
       setState(() {
         pickerColor = Color(themeColor);
       });
@@ -121,7 +121,7 @@ class _MyPickerState extends State<MyPicker> {
           setState(() {
             pickerColor = picked;
             providerPreference.setPrefInt(
-                key: "theme_color", value: picked.value);
+                key: "theme_color", value: picked.toARGB32());
           });
         });
   }
